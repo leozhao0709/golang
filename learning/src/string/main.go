@@ -94,4 +94,6 @@ func main() {
 
 	strArr := strings.Split("hello, world, ok", ",")
 	fmt.Println(strArr[1])
+
+	fmt.Println(strings.Trim("! he!llo! ", " !"))
 }
