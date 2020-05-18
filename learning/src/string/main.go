@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 func convertWithSprintf() {
@@ -82,6 +83,15 @@ func parseString() {
 func main() {
 	// convertWithSprintf()
 	// convertWithStrConv()
+	// parseString()
 
-	parseString()
+	str := "hello北"
+	length := len(str)
+	fmt.Println("....str length is", length)
+
+	r := []rune(str)
+	fmt.Println("...rune length is", len(r))
+
+	strArr := strings.Split("hello, world, ok", ",")
+	fmt.Println(strArr[1])
 }
