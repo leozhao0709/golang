@@ -1,17 +1,41 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type person struct {
-	name string
-	age  int8
+	name  string
+	age   int8
+	slice []int8
+	map1  map[string]string
 }
 
 func main() {
-	p := person{name: "Lei", age: 28}
-	fmt.Println(p)
+	p1 := person{name: "Lei", age: 28}
+	fmt.Println(p1)
 
-	p.name = "lei"
-	p.age = 29
-	fmt.Println(p)
+	p1.name = "lei"
+	p1.age = 29
+	p1.slice = append(p1.slice, 2)
+	p1.map1 = map[string]string{}
+	p1.map1["123"] = "456"
+	fmt.Println(p1)
+
+	pCopy := p1
+	pCopy.name = "copy"
+	fmt.Println(pCopy.name, p1.name)
+
+	p2 := person{}
+	p2.name = "name"
+	fmt.Println(p2)
+
+	p3 := new(person)
+	p3.name = "new"
+	fmt.Println(*p3)
+
+	p4 := &person{}
+	p4.name = "pointer"
+	fmt.Println(*p4)
+	fmt.Println(p4.name)
 }
