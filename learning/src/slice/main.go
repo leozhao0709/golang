@@ -20,4 +20,8 @@ func main() {
 
 	slice = append(slice[:3], slice[4:]...)
 	fmt.Println(slice)
+
+	slice = []int{}
+	slice = append(slice, 1)
+	fmt.Println(slice)
 }
