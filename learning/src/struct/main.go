@@ -44,9 +44,15 @@ func main() {
 
 	p4 := &person{}
 	p4.name = "pointer"
-	fmt.Println(*p4)
-	fmt.Println(p4.name)
+	fmt.Println((*p4).name)
+
+	changeName(&p2)
+	fmt.Println("changed p2 name:", p2.name)
 
 	r := react{leftUp: &pointer{10}, rightDown: &pointer{30}}
 	fmt.Printf("leftUp address: %p, rightDown address: %p \n", r.leftUp, r.rightDown)
+}
+
+func changeName(p *person) {
+	p.name = "changedName"
 }
