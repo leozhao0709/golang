@@ -11,6 +11,14 @@ type person struct {
 	map1  map[string]string
 }
 
+type pointer struct {
+	x int
+}
+
+type react struct {
+	leftUp, rightDown *pointer
+}
+
 func main() {
 	p1 := person{name: "Lei", age: 28}
 	fmt.Println(p1)
@@ -38,4 +46,7 @@ func main() {
 	p4.name = "pointer"
 	fmt.Println(*p4)
 	fmt.Println(p4.name)
+
+	r := react{leftUp: &pointer{10}, rightDown: &pointer{30}}
+	fmt.Printf("leftUp address: %p, rightDown address: %p \n", r.leftUp, r.rightDown)
 }
