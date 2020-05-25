@@ -34,4 +34,7 @@ func main() {
 	b.SayOk()
 	b.A.SayOk()
 	b.hello()
+
+	b2 := B{Name: "b2", A: A{Name: "a", age: 18}}
+	fmt.Println(b2)
 }
