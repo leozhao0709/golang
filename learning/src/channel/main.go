@@ -15,10 +15,11 @@ func main() {
 	// fmt.Println("num2 is", num2)
 	// close(intChan)
 
-	iterateChan()
+	var result = iterateChan()
+	fmt.Println(result)
 }
 
-func iterateChan() {
+func iterateChan() []int {
 	var intChan2 chan int = make(chan int, 100)
 
 	for i := 0; i < cap(intChan2); i++ {
@@ -28,8 +29,23 @@ func iterateChan() {
 	// must close channel before you iterate channel
 	close(intChan2)
 
-	// must use for range channel loop to iterate channel
-	for value := range intChan2 {
-		fmt.Println(value)
+	var result []int = make([]int, 100)
+	var i = 0
+
+	// // must use for range channel loop to iterate channel
+	// for value := range intChan2 {
+	// 	result[i] = value
+	// 	i++
+	// }
+
+	for {
+		val, ok := <-intChan2
+		if !ok {
+			break
+		}
+		result[i] = val
+		i++
 	}
+
+	return result
 }
