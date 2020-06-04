@@ -1,25 +1,32 @@
 package main
 
 import (
-	"log"
 	"net"
+
+	"github.com/leozhao0709/learning/src/tcp/server/logger"
+	"github.com/leozhao0709/learning/src/tcp/server/tests"
+	"go.uber.org/zap"
 )
 
+var log = logger.GetLogger()
+
 func main() {
+	defer log.Sync()
 	listener, err := net.Listen("tcp", "0.0.0.0:8888")
 	if err != nil {
-		log.Fatalln("listen error", err) // fatalln will exit os
+		log.Error("listen error", zap.Error(err))
 	}
 	defer listener.Close()
-	log.Println("listen start at 8888")
+	log.Info("listen start at 8888")
 
+	tests.Test()
 	for {
-		log.Println("waiting for client connecting...")
+		log.Info("waiting for client connecting...")
 		conn, err := listener.Accept()
 		if err != nil {
-			log.Println("Accep err=", err)
+			log.Error("Accep err", zap.Error(err))
 		} else {
-			log.Printf("Accept success connect=%v\n", conn)
+			log.Info("Accept success connect", zap.Any("conn", conn))
 		}
 	}
 }
