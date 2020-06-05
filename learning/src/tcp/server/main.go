@@ -8,9 +8,11 @@ import (
 	"go.uber.org/zap"
 )
 
-var log = logger.GetLogger()
+var log *zap.Logger
 
 func main() {
+	log = logger.GetLogger()
+
 	defer log.Sync()
 	listener, err := net.Listen("tcp", "0.0.0.0:8888")
 	if err != nil {

@@ -19,10 +19,6 @@ const (
 var logger *zap.Logger
 var loggerMode uint8
 
-func init() {
-	loggerMode = DevMode
-}
-
 // SetLoggerMode set the logger mode
 func SetLoggerMode(mode uint8) {
 	loggerMode = mode
@@ -33,29 +29,35 @@ func GetLoggerMode() uint8 {
 	return loggerMode
 }
 
-// GetLogger get the logger
+// GetLogger get the global logger
 func GetLogger() *zap.Logger {
 	if logger == nil {
-		var err error
-		var config zap.Config
-		switch loggerMode {
-		case DevMode:
-			config = zap.NewDevelopmentConfig()
-		case ExampleMode:
-			logger = zap.NewExample(zap.AddCaller())
-			return logger
-		default:
-			config = zap.NewProductionConfig()
-			config.OutputPaths = []string{"log.json"}
-		}
-
-		config.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
-		logger, err = config.Build()
-
-		if err != nil {
-			log.Fatalln("initial zap logger failed. Exit!")
-		}
-		return logger
+		initLogger()
 	}
+
 	return logger
+}
+
+func initLogger() {
+	var err error
+	var config zap.Config
+	switch loggerMode {
+	case DevMode:
+		config = zap.NewDevelopmentConfig()
+	case ExampleMode:
+		logger = zap.NewExample(zap.AddCaller())
+		return
+	case ProdMode:
+		config = zap.NewProductionConfig()
+		config.OutputPaths = []string{"log.log"}
+	default:
+		config = zap.NewDevelopmentConfig()
+	}
+
+	config.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
+	logger, err = config.Build()
+
+	if err != nil {
+		log.Panicln("initial zap logger failed. Exit!")
+	}
 }
