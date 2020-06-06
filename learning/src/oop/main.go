@@ -1,10 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 type A struct {
 	Name string
-	age  int
+	Age  int
 }
 
 func (a *A) SayOk() {
@@ -28,13 +31,16 @@ func main() {
 	var b = B{}
 	b.Name = "b"
 	b.A.Name = "a"
-	b.age = 18
+	b.Age = 18
 
-	fmt.Println("b.age is", b.age)
+	fmt.Println("b.age is", b.Age)
 	b.SayOk()
 	b.A.SayOk()
 	b.hello()
 
-	b2 := B{Name: "b2", A: A{Name: "a", age: 18}}
-	fmt.Println(b2)
+	b2 := B{Name: "b2", A: A{Name: "a", Age: 18}}
+	fmt.Printf("%+v\n", b2)
+
+	jsonStr, _ := json.Marshal(&b2)
+	fmt.Println(string(jsonStr))
 }
