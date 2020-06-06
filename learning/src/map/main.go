@@ -2,7 +2,35 @@ package main
 
 import "fmt"
 
+func mergeMap(map1 map[string]string, map2 map[string]string) map[string]string {
+	var resultMap = map[string]string{}
+	for key, value := range map1 {
+		resultMap[key] = value
+	}
+
+	for key, value := range map2 {
+		resultMap[key] = value
+	}
+
+	return resultMap
+}
+
 func main() {
+	var map1 = map[string]string{
+		"key1": "val1",
+		"key2": "val2",
+	}
+
+	var map2 = map[string]string{
+		"key3": "val3",
+		"key4": "val4",
+	}
+
+	var map3 = mergeMap(map1, map2)
+	fmt.Println(map3)
+}
+
+func basicMap() {
 	var cities = make(map[string]string)
 	cities["no1"] = "北京"
 	cities["no2"] = "天津"

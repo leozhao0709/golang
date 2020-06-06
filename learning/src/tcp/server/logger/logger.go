@@ -24,11 +24,6 @@ func SetLoggerMode(mode uint8) {
 	loggerMode = mode
 }
 
-// GetLoggerMode get the logger mode
-func GetLoggerMode() uint8 {
-	return loggerMode
-}
-
 // GetLogger get the global logger
 func GetLogger() *zap.Logger {
 	if logger == nil {

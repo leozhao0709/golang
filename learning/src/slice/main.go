@@ -24,4 +24,8 @@ func main() {
 	slice = []int{}
 	slice = append(slice, 1)
 	fmt.Println(slice)
+
+	var strSlice = []string{"hello"}
+	strSlice = append(strSlice, "world")
+	fmt.Println(strSlice)
 }
