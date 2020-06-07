@@ -21,7 +21,7 @@ func TestIntMin(t *testing.T) {
 		// testName := fmt.Sprintf("%d, %d", tt.a, tt.b)
 		testName := fmt.Sprintf("IntMin#%d", index)
 		t.Run(testName, func(t *testing.T) {
-			ans := intMin(tt.a, tt.b)
+			ans := IntMin(tt.a, tt.b)
 			if ans != tt.expected {
 				t.Errorf("got %d, expected %d", ans, tt.expected)
 			}
@@ -35,7 +35,7 @@ func BenchmarkIntMin(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		actual := intMin(num1, num2)
+		actual := IntMin(num1, num2)
 		if actual != expected {
 			b.Errorf("got %d, expected %d", actual, expected)
 		}

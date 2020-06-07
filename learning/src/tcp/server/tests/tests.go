@@ -1,10 +1,11 @@
 package tests
 
 import (
-	"github.com/leozhao0709/learning/src/tcp/server/logger"
+	"runtime/debug"
+
+	"github.com/labstack/gommon/log"
 )
 
 func Test() {
-	var log = logger.GetLogger()
-	log.Debug("debug.....")
+	log.Debugf("debug.....%v\n", string(debug.Stack()))
 }

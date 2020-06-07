@@ -1,0 +1,43 @@
+2020-06-06T14:29:20-07:00 INFO listen start at 8888
+2020-06-06T14:29:20-07:00 DEBUG debug.....goroutine 1 [running]:
+runtime/debug.Stack(0x123d4f0, 0x46, 0x1e)
+	/usr/local/Cellar/go/1.14.2_1/libexec/src/runtime/debug/stack.go:24 +0x9d
+github.com/leozhao0709/learning/src/tcp/server/tests.Test()
+	/Users/leizhao/Documents/my_git/golang/learning/src/tcp/server/tests/tests.go:10 +0x26
+main.main()
+	/Users/leizhao/Documents/my_git/golang/learning/src/tcp/server/main.go:32 +0x255
+
+
+2020-06-06T14:29:20-07:00 INFO waiting for client connecting...
+2020-06-06T14:29:39-07:00 INFO listen start at 8888
+2020-06-06T14:29:39-07:00 DEBUG debug.....goroutine 1 [running]:
+runtime/debug.Stack(0x123d4f0, 0x46, 0x1e)
+	/usr/local/Cellar/go/1.14.2_1/libexec/src/runtime/debug/stack.go:24 +0x9d
+github.com/leozhao0709/learning/src/tcp/server/tests.Test()
+	/Users/leizhao/Documents/my_git/golang/learning/src/tcp/server/tests/tests.go:10 +0x26
+main.main()
+	/Users/leizhao/Documents/my_git/golang/learning/src/tcp/server/main.go:32 +0x255
+
+2020-06-06T14:29:39-07:00 INFO waiting for client connecting...
+2020-06-06T14:31:01-07:00 INFO prefix listen start at 8888
+2020-06-06T14:31:01-07:00 DEBUG prefix debug.....goroutine 1 [running]:
+runtime/debug.Stack(0x123d510, 0x46, 0x1e)
+	/usr/local/Cellar/go/1.14.2_1/libexec/src/runtime/debug/stack.go:24 +0x9d
+github.com/leozhao0709/learning/src/tcp/server/tests.Test()
+	/Users/leizhao/Documents/my_git/golang/learning/src/tcp/server/tests/tests.go:10 +0x26
+main.main()
+	/Users/leizhao/Documents/my_git/golang/learning/src/tcp/server/main.go:32 +0x255
+
+
+2020-06-06T14:31:01-07:00 INFO prefix waiting for client connecting...
+2020-06-06T14:31:21-07:00 INFO prefix listen start at 8888
+2020-06-06T14:31:21-07:00 DEBUG prefix debug.....goroutine 1 [running]:
+runtime/debug.Stack(0x123d628, 0x46, 0x1f)
+	/usr/local/Cellar/go/1.14.2_1/libexec/src/runtime/debug/stack.go:24 +0x9d
+github.com/leozhao0709/learning/src/tcp/server/tests.Test()
+	/Users/leizhao/Documents/my_git/golang/learning/src/tcp/server/tests/tests.go:10 +0x26
+main.main()
+	/Users/leizhao/Documents/my_git/golang/learning/src/tcp/server/main.go:33 +0x26e
+
+
+2020-06-06T14:31:21-07:00 INFO prefix waiting for client connecting...

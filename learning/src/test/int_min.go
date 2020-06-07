@@ -1,6 +1,6 @@
 package test
 
-func intMin(a, b int) int {
+func IntMin(a, b int) int {
 	if a < b {
 		return a
 	}
