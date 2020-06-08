@@ -1,24 +1,16 @@
 package main
 
 import (
+	"fmt"
+	"io"
 	"net"
 
 	"github.com/labstack/gommon/log"
-	"github.com/leozhao0709/learning/src/tcp/server/tests"
 )
 
 func main() {
-
 	log.SetLevel(log.DEBUG)
-	log.SetHeader("${time_rfc3339} ${level} ${prefix}")
-	log.SetPrefix("prefix")
-
-	// file, err := os.OpenFile("log.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	// if err != nil {
-	// 	log.Fatal("open log file Fail!")
-	// }
-	// wrt := io.MultiWriter(os.Stdout, file)
-	// log.SetOutput(wrt)
+	log.SetHeader("${time_rfc3339} ${level}")
 
 	listener, err := net.Listen("tcp", "0.0.0.0:8888")
 	if err != nil {
@@ -27,14 +19,32 @@ func main() {
 	defer listener.Close()
 	log.Info("listen start at 8888")
 
-	tests.Test()
 	for {
-		log.Info("waiting for client connecting...")
 		conn, err := listener.Accept()
 		if err != nil {
-			log.Fatal("Accep err")
+			log.Fatal("Accep err", err)
 		} else {
-			log.Info("Accept success connect %v", conn)
+			go process(conn)
 		}
+	}
+}
+
+func process(conn net.Conn) {
+	defer conn.Close()
+	log.Infof("Accept one connect %v", conn.RemoteAddr())
+
+	for {
+		buffer := make([]byte, 4096)
+		n, err := conn.Read(buffer)
+
+		if err != nil {
+			if err != io.EOF {
+				log.Error("client read error", err)
+			}
+			log.Infof("client from %v closed", conn.RemoteAddr())
+			return
+		}
+		log.Infof("client from %v sent message", conn.RemoteAddr())
+		fmt.Println(string(buffer[:n]))
 	}
 }
