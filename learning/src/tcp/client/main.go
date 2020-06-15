@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"net"
 	"os"
+	"strings"
 
 	"github.com/labstack/gommon/log"
 )
@@ -18,22 +19,20 @@ func main() {
 	}
 
 	for {
-		reader := bufio.NewReader(os.Stdin)
-		line, _, err := reader.ReadLine()
-		if err != nil {
-			log.Error("read line error", err)
-		}
+		scanner := bufio.NewScanner(os.Stdin)
+		if scanner.Scan() {
+			text := scanner.Text()
 
-		if string(line) == "exit" {
-			break
-		}
+			if strings.TrimSpace(text) == "exit" {
+				break
+			}
 
-		var n int
-		n, err = conn.Write(line)
-		if err != nil {
-			log.Error("send data error", err)
-		}
+			n, err := conn.Write([]byte(text))
+			if err != nil {
+				log.Error("send data error", err)
+			}
 
-		log.Infof("client send %d bytes", n)
+			log.Infof("client send %d bytes", n)
+		}
 	}
 }
