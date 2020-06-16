@@ -29,7 +29,7 @@ func login(userID *string, password *string) error {
 		return err
 	}
 
-	conn.Write(result)
+	_, err = conn.Write(result)
 
 	return nil
 }
