@@ -21,7 +21,7 @@ type react struct {
 
 func main() {
 	p1 := person{name: "Lei", age: 28}
-	fmt.Println(p1)
+	fmt.Printf("%+v\n", p1)
 
 	p1.name = "lei"
 	p1.age = 29
@@ -36,11 +36,12 @@ func main() {
 
 	p2 := person{}
 	p2.name = "name"
-	fmt.Println(p2)
+	fmt.Printf("%+v\n", p2)
 
 	p3 := new(person)
 	p3.name = "new"
-	fmt.Println(*p3)
+	// fmt.Println(*p3)
+	fmt.Printf("%+v\n", *p3)
 
 	p4 := &person{}
 	p4.name = "pointer"
