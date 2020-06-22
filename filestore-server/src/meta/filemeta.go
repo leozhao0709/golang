@@ -1,6 +1,10 @@
 package meta
 
-import "fmt"
+import (
+	"fmt"
+
+	mydb "github.com/leozhao0709/golang/filestore-server/src/db"
+)
 
 // FileMeta File metadata
 type FileMeta struct {
@@ -20,6 +24,12 @@ func init() {
 // UpdateFileMeta add or update file meta data
 func UpdateFileMeta(fmeta FileMeta) {
 	fileMetas[fmeta.FileSha1] = fmeta
+}
+
+// UpdateFileMetaDB Update File Meta to DB
+func UpdateFileMetaDB(fmeta FileMeta) error {
+	err := mydb.SaveFile(fmeta.FileSha1, fmeta.FileName, fmeta.FileSize, fmeta.Location)
+	return err
 }
 
 // GetFileMeta get the file meta data with sha

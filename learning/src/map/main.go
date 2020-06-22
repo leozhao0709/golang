@@ -16,18 +16,22 @@ func mergeMap(map1 map[string]string, map2 map[string]string) map[string]string 
 }
 
 func main() {
-	var map1 = map[string]string{
-		"key1": "val1",
-		"key2": "val2",
-	}
+	// var map1 = map[string]string{
+	// 	"key1": "val1",
+	// 	"key2": "val2",
+	// }
 
-	var map2 = map[string]string{
-		"key3": "val3",
-		"key4": "val4",
-	}
+	// var map2 = map[string]string{
+	// 	"key3": "val3",
+	// 	"key4": "val4",
+	// }
 
-	var map3 = mergeMap(map1, map2)
-	fmt.Println(map3)
+	// var map3 = mergeMap(map1, map2)
+	// fmt.Println(map3)
+	var map1 = map[string]string{}
+	var key = "key1"
+	map1[key] = "val1"
+	fmt.Println(map1)
 }
 
 func basicMap() {

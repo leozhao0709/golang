@@ -54,9 +54,13 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) *handlererror.HandleE
 		// must seek before you get filesha1
 		newFile.Seek(0, 0)
 		fileMeta.FileSha1 = util.FileSha1(newFile)
-		log.Debug("stored file sha1 is ", fileMeta.FileSha1)
+		log.Debugf("stored filemeta is %+v", fileMeta)
 
-		meta.UpdateFileMeta(fileMeta)
+		// meta.UpdateFileMeta(fileMeta)
+		err = meta.UpdateFileMetaDB(fileMeta)
+		if err != nil {
+			return handlererror.InternalServerError(err)
+		}
 
 		http.Redirect(w, r, "/file/upload/success", http.StatusFound)
 	}
