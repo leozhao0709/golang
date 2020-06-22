@@ -78,9 +78,11 @@ func UploadSuccessHandler(w http.ResponseWriter, r *http.Request) *handlererror.
 func GetFileMetaHandler(w http.ResponseWriter, r *http.Request) *handlererror.HandleError {
 	filehash := r.FormValue("filehash")
 	log.Debug("file hash is ", filehash)
-	filemeta, err := meta.GetFileMeta(filehash)
+	// filemeta, err := meta.GetFileMeta(filehash)
+	filemeta, err := meta.GetFileMetaDB(filehash)
 	if err != nil {
-		return handlererror.NotFoundError(err)
+		// return handlererror.NotFoundError(err)
+		log.Error(err)
 	}
 	data, err := json.Marshal(&filemeta)
 	if err != nil {

@@ -1,4 +1,4 @@
-package mydb
+package db
 
 import (
 	// mysql driver
@@ -11,8 +11,7 @@ var db *sqlx.DB
 
 func init() {
 	var err error
-	db, err = sqlx.Connect("mysql", "lzhao:12345@tcp(127.0.0.1:3307)/fileserver?charset=utf8")
-	log.Info("......db....", db)
+	db, err = sqlx.Connect("mysql", "lzhao:12345@tcp(127.0.0.1:3307)/fileserver?charset=utf8&parseTime=true")
 	if err != nil {
 		log.Panic("db connect err", err)
 	}
@@ -21,6 +20,5 @@ func init() {
 
 // GetDB return the db connection
 func GetDB() *sqlx.DB {
-	log.Info("......db....", db)
 	return db
 }

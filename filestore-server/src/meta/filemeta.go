@@ -3,7 +3,7 @@ package meta
 import (
 	"fmt"
 
-	mydb "github.com/leozhao0709/golang/filestore-server/src/db"
+	"github.com/leozhao0709/golang/filestore-server/src/db"
 )
 
 // FileMeta File metadata
@@ -28,7 +28,7 @@ func UpdateFileMeta(fmeta FileMeta) {
 
 // UpdateFileMetaDB Update File Meta to DB
 func UpdateFileMetaDB(fmeta FileMeta) error {
-	err := mydb.SaveFile(fmeta.FileSha1, fmeta.FileName, fmeta.FileSize, fmeta.Location)
+	err := db.SaveFile(fmeta.FileSha1, fmeta.FileName, fmeta.FileSize, fmeta.Location)
 	return err
 }
 
@@ -39,6 +39,21 @@ func GetFileMeta(fileSha1 string) (FileMeta, error) {
 		return meta, fmt.Errorf("fileSha1 %v cannot be found", fileSha1)
 	}
 	return meta, nil
+}
+
+// GetFileMetaDB Get File Meta from DB
+func GetFileMetaDB(filesha1 string) (FileMeta, error) {
+	tableFile, err := db.GetFileMeta(filesha1)
+	if err != nil {
+		return FileMeta{}, err
+	}
+	return FileMeta{
+		FileName: tableFile.FileName,
+		FileSha1: tableFile.FileHash,
+		FileSize: tableFile.FileSize.Int64,
+		Location: tableFile.FileAddr,
+		UploadAt: tableFile.UploadAt.Format("2006/01/02 15:04:05"),
+	}, nil
 }
 
 // RemoveFileMeta remove one file meta with sha1
