@@ -32,6 +32,9 @@ func main() {
 	http.HandleFunc("/file/update", handlerWrapper(handler.FileMetaUpdateHandler))
 	http.HandleFunc("/file/delete", handlerWrapper(handler.FileDeleteHandler))
 
+	// user
+	http.HandleFunc("/user/signup", handlerWrapper(handler.SignupHandler))
+
 	log.Info("server start listening at port 8080")
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
