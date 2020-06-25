@@ -21,9 +21,8 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) *handlererror.HandleE
 			return handlererror.InternalServerError(err)
 		}
 		w.Write(bytes)
-	}
-
-	if r.Method == http.MethodPost {
+		return nil
+	} else if r.Method == http.MethodPost {
 		username := strings.TrimSpace(r.PostFormValue("username"))
 		password := strings.TrimSpace(r.PostFormValue("password"))
 
@@ -38,6 +37,25 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) *handlererror.HandleE
 		}
 
 		w.Write([]byte("SUCCESS"))
+		return nil
+	} else {
+		return handlererror.MethodNotAllowedError(r)
 	}
-	return nil
+}
+
+// SigninHandler user sign in handler
+func SigninHandler(w http.ResponseWriter, r *http.Request) *handlererror.HandleError {
+
+	if r.Method == http.MethodGet {
+		bytes, err := ioutil.ReadFile("./src/static/view/signin.html")
+		if err != nil {
+			return handlererror.InternalServerError(err)
+		}
+		w.Write(bytes)
+		return nil
+	} else if r.Method == http.MethodPost {
+		return nil
+	} else {
+		return handlererror.MethodNotAllowedError(r)
+	}
 }

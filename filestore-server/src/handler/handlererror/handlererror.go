@@ -1,6 +1,9 @@
 package handlererror
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+)
 
 // HandleError http handler error
 type HandleError struct {
@@ -24,8 +27,8 @@ func ForbiddenError(err error) *HandleError {
 }
 
 // MethodNotAllowedError Method Not Allowed Error
-func MethodNotAllowedError(err error) *HandleError {
-	return CreateError(http.StatusMethodNotAllowed, err)
+func MethodNotAllowedError(r *http.Request) *HandleError {
+	return CreateError(http.StatusMethodNotAllowed, fmt.Errorf("%v is not allowed for %v", r.Method, r.URL.Path))
 }
 
 // NotFoundError 404 not found error

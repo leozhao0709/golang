@@ -121,7 +121,7 @@ func DownloadHanlder(w http.ResponseWriter, r *http.Request) *handlererror.Handl
 func FileMetaUpdateHandler(w http.ResponseWriter, r *http.Request) *handlererror.HandleError {
 
 	if r.Method != http.MethodPost {
-		return handlererror.MethodNotAllowedError(fmt.Errorf("%v is only allowed Post", r.RequestURI))
+		return handlererror.MethodNotAllowedError(r)
 	}
 
 	opType := r.FormValue("opType")

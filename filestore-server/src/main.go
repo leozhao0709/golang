@@ -15,7 +15,7 @@ type requestHandler func(http.ResponseWriter, *http.Request)
 
 func handlerWrapper(handlerFunc func(http.ResponseWriter, *http.Request) *handlererror.HandleError) requestHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Debug(r.Method, " ", r.RequestURI)
+		log.Debug(r.Method, " ", r.URL.Path)
 		err := handlerFunc(w, r)
 		if err != nil {
 			http.Error(w, http.StatusText(err.StatusCode), err.StatusCode)
@@ -55,6 +55,7 @@ func main() {
 
 	// user
 	http.HandleFunc("/user/signup", handlerWrapper(handler.SignupHandler))
+	http.HandleFunc("/user/signin", handlerWrapper(handler.SigninHandler))
 
 	log.Info("server start listening at port 8080")
 	err = http.ListenAndServe(":8080", nil)
