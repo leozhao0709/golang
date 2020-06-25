@@ -4,7 +4,7 @@ import "github.com/labstack/gommon/log"
 
 // UserSignup user sign up
 func UserSignup(username string, password string) error {
-	result, err := GetDB().Exec("insert into tbl_user (`user_name`, `user_pwd`) values($1, $2)", username, password)
+	result, err := GetDB().Exec("insert into tbl_user (`user_name`, `user_pwd`) values(?, ?)", username, password)
 
 	if err != nil {
 		log.Info("user sign up fail ", err)
@@ -16,7 +16,7 @@ func UserSignup(username string, password string) error {
 		log.Info("query rowsAffected error")
 	}
 
-	log.Info("user sign with rowsAffected: ", rowsAffected)
+	log.Info("user sign up with rowsAffected: ", rowsAffected)
 
 	return nil
 }

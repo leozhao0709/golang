@@ -32,3 +32,8 @@ func MethodNotAllowedError(err error) *HandleError {
 func NotFoundError(err error) *HandleError {
 	return CreateError(http.StatusNotFound, err)
 }
+
+// BadRequestError the request is a bad request
+func BadRequestError(err error) *HandleError {
+	return CreateError(http.StatusBadRequest, err)
+}

@@ -18,7 +18,6 @@ import (
 
 // UploadHandler handling file uploads
 func UploadHandler(w http.ResponseWriter, r *http.Request) *handlererror.HandleError {
-
 	if r.Method == http.MethodGet {
 		bytes, err := ioutil.ReadFile("src/static/view/index.html")
 		if err != nil {

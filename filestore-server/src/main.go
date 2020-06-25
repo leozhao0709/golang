@@ -2,6 +2,9 @@ package main
 
 import (
 	"net/http"
+	"os"
+	"path/filepath"
+	"strings"
 
 	"github.com/labstack/gommon/log"
 	"github.com/leozhao0709/golang/filestore-server/src/handler"
@@ -21,9 +24,27 @@ func handlerWrapper(handlerFunc func(http.ResponseWriter, *http.Request) *handle
 	}
 }
 
+func staticServerWrapper(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if strings.HasSuffix(r.RequestURI, "/") {
+			http.NotFound(w, r)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
+}
+
 func main() {
 	log.SetLevel(log.DEBUG)
 	log.SetHeader("${time_rfc3339} ${level} ${prefix}")
+
+	// static file
+	pwd, err := os.Getwd()
+	if err != nil {
+		log.Fatal("static file failed")
+	}
+	staticFileServer := http.FileServer(http.Dir(filepath.Join(pwd, "src")))
+	http.Handle("/static/", staticServerWrapper(staticFileServer))
 
 	http.HandleFunc("/file/upload", handlerWrapper(handler.UploadHandler))
 	http.HandleFunc("/file/upload/success", handlerWrapper(handler.UploadSuccessHandler))
@@ -36,7 +57,7 @@ func main() {
 	http.HandleFunc("/user/signup", handlerWrapper(handler.SignupHandler))
 
 	log.Info("server start listening at port 8080")
-	err := http.ListenAndServe(":8080", nil)
+	err = http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatal("sever start fail", err)
 	}
