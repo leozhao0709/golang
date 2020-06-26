@@ -56,6 +56,7 @@ func main() {
 	// user
 	http.HandleFunc("/user/signup", handlerWrapper(handler.SignupHandler))
 	http.HandleFunc("/user/signin", handlerWrapper(handler.SigninHandler))
+	http.HandleFunc("/user/info", handlerWrapper(handler.UserInfoHandler))
 
 	log.Info("server start listening at port 8080")
 	err = http.ListenAndServe(":8080", nil)
