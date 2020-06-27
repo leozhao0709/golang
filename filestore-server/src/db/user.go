@@ -1,19 +1,20 @@
 package db
 
 import (
-	"time"
+	"database/sql"
 
 	"github.com/labstack/gommon/log"
+	"github.com/leozhao0709/golang/filestore-server/src/common"
 )
 
 // User user model
 type User struct {
-	Username     string    `db:"user_name"`
-	Email        string    `db:"email"`
-	Phone        string    `db:"phone"`
-	SignupAt     time.Time `db:"signup_at"`
-	LastActiveAt time.Time `db:"last_active"`
-	Status       int       `db:"status"`
+	Username     string      `db:"user_name"`
+	Email        string      `db:"email"`
+	Phone        string      `db:"phone"`
+	SignupAt     common.Time `db:"signup_at"`
+	LastActiveAt common.Time `db:"last_active"`
+	Status       int         `db:"status"`
 }
 
 // UserSignup user sign up
@@ -41,7 +42,7 @@ func UserSignin(username string, shaPassword string) (bool, error) {
 	var dbShaPassword string
 	err := GetDB().Get(&dbShaPassword, "select user_pwd from tbl_user where user_name=? limit 1", username)
 
-	if err != nil {
+	if err != nil && err != sql.ErrNoRows {
 		return false, err
 	}
 
@@ -56,7 +57,7 @@ func UserSignin(username string, shaPassword string) (bool, error) {
 func UpdateUserToken(username string, token string) error {
 	_, err := GetDB().Exec("insert into tbl_user_token (user_name, user_token) value(?, ?) on duplicate key update user_token=?", username, token, token)
 
-	if err != nil {
+	if err != nil && err != sql.ErrNoRows {
 		return err
 	}
 	return nil
@@ -66,5 +67,10 @@ func UpdateUserToken(username string, token string) error {
 func GetUserInfo(username string) (User, error) {
 	var user User
 	err := GetDB().Get(&user, "select user_name, email, phone, signup_at, last_active, status from tbl_user where user_name=?", username)
-	return user, err
+
+	if err != nil && err == sql.ErrNoRows {
+		return user, err
+	}
+
+	return user, nil
 }

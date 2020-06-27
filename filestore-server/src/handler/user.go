@@ -110,13 +110,7 @@ func UserInfoHandler(w http.ResponseWriter, r *http.Request) *handlererror.Handl
 		json.NewEncoder(w).Encode(util.RespMsg{
 			Code: 0,
 			Msg:  "OK",
-			Data: struct {
-				Username string
-				SignupAt string
-			}{
-				Username: user.Username,
-				SignupAt: user.SignupAt.Format("2006/01/02 15:04:05"),
-			},
+			Data: user,
 		})
 
 		return nil

@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/labstack/gommon/log"
+	"github.com/leozhao0709/golang/filestore-server/src/common"
 	"github.com/leozhao0709/golang/filestore-server/src/handler"
 	"github.com/leozhao0709/golang/filestore-server/src/handler/handlererror"
 )
@@ -35,8 +36,12 @@ func staticServerWrapper(next http.Handler) http.Handler {
 }
 
 func main() {
+	// logger
 	log.SetLevel(log.DEBUG)
 	log.SetHeader("${time_rfc3339} ${level} ${prefix}")
+
+	// custom time
+	common.SetTimeFormat("2006/01/02 15:04:05")
 
 	// static file
 	pwd, err := os.Getwd()
