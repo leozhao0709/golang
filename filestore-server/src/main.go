@@ -41,7 +41,7 @@ func main() {
 	log.SetHeader("${time_rfc3339} ${level} ${prefix}")
 
 	// custom time
-	formattime.SetTimeFormat("2006-01-02 15:04:05")
+	formattime.SetTimeFormat("2006/01/02 15:04:05")
 
 	// static file
 	pwd, err := os.Getwd()
@@ -52,6 +52,7 @@ func main() {
 	http.Handle("/static/", staticServerWrapper(staticFileServer))
 
 	http.HandleFunc("/file/upload", handlerWrapper(handler.UploadHandler))
+	http.HandleFunc("/file/fastupload", handlerWrapper(handler.FastUploadHandler))
 	http.HandleFunc("/file/upload/success", handlerWrapper(handler.UploadSuccessHandler))
 	http.HandleFunc("/file/meta", handlerWrapper(handler.GetFileMetaHandler))
 	http.HandleFunc("/file/query", handlerWrapper(handler.QueryUserFileMetasHandler))

@@ -43,5 +43,10 @@ type TableFile struct {
 func GetFileMeta(filehash string) (*TableFile, error) {
 	var tableFile = &TableFile{}
 	err := GetDB().Get(tableFile, "select file_sha1, file_name, file_size, file_addr, update_at from tbl_file where file_sha1=? and status=1", filehash)
-	return tableFile, err
+
+	if err != nil && err != sql.ErrNoRows {
+		return nil, err
+	}
+
+	return tableFile, nil
 }

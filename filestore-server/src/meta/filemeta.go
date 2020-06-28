@@ -42,12 +42,12 @@ func GetFileMeta(fileSha1 string) (FileMeta, error) {
 }
 
 // GetFileMetaDB Get File Meta from DB
-func GetFileMetaDB(filesha1 string) (FileMeta, error) {
+func GetFileMetaDB(filesha1 string) (*FileMeta, error) {
 	tableFile, err := db.GetFileMeta(filesha1)
 	if err != nil {
-		return FileMeta{}, err
+		return nil, err
 	}
-	return FileMeta{
+	return &FileMeta{
 		FileName: tableFile.FileName,
 		FileSha1: tableFile.FileHash,
 		FileSize: tableFile.FileSize.Int64,

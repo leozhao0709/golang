@@ -85,6 +85,50 @@ func UploadSuccessHandler(w http.ResponseWriter, r *http.Request) *handlererror.
 	return nil
 }
 
+// FastUploadHandler Fast Upload Handler
+func FastUploadHandler(w http.ResponseWriter, r *http.Request) *handlererror.HandleError {
+
+	authErr := hooks.UseAuth(w, r)
+	if authErr != nil {
+		return authErr
+	}
+
+	filehash := r.FormValue("filehash")
+	username := r.FormValue("username")
+	filename := r.FormValue("filename")
+
+	fileMeta, err := meta.GetFileMetaDB(filehash)
+
+	if err != nil {
+		return handlererror.InternalServerError(err)
+	}
+
+	if fileMeta == nil {
+		json.NewEncoder(w).Encode(util.RespMsg{
+			Code: -1,
+			Msg:  "Fast Upload file not exist, please use upload api",
+		})
+		return nil
+	}
+
+	err = db.SaveUserFile(username, filehash, filename, fileMeta.FileSize)
+
+	if err != nil {
+		json.NewEncoder(w).Encode(util.RespMsg{
+			Code: -2,
+			Msg:  "Fast Upload fail, please try a few seconds later",
+		})
+		return nil
+	}
+
+	json.NewEncoder(w).Encode(util.RespMsg{
+		Code: 0,
+		Msg:  "Success",
+	})
+
+	return nil
+}
+
 // GetFileMetaHandler Get file meta data
 func GetFileMetaHandler(w http.ResponseWriter, r *http.Request) *handlererror.HandleError {
 	hooks.UseAuth(w, r)
