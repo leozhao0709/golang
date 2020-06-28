@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/labstack/gommon/log"
-	"github.com/leozhao0709/golang/filestore-server/src/common"
+	"github.com/leozhao0709/golang/filestore-server/src/common/formattime"
 	"github.com/leozhao0709/golang/filestore-server/src/handler"
 	"github.com/leozhao0709/golang/filestore-server/src/handler/handlererror"
 )
@@ -41,7 +41,7 @@ func main() {
 	log.SetHeader("${time_rfc3339} ${level} ${prefix}")
 
 	// custom time
-	common.SetTimeFormat("2006/01/02 15:04:05")
+	formattime.SetTimeFormat("2006-01-02 15:04:05")
 
 	// static file
 	pwd, err := os.Getwd()
@@ -54,6 +54,7 @@ func main() {
 	http.HandleFunc("/file/upload", handlerWrapper(handler.UploadHandler))
 	http.HandleFunc("/file/upload/success", handlerWrapper(handler.UploadSuccessHandler))
 	http.HandleFunc("/file/meta", handlerWrapper(handler.GetFileMetaHandler))
+	http.HandleFunc("/file/query", handlerWrapper(handler.QueryUserFileMetasHandler))
 	http.HandleFunc("/file/download", handlerWrapper(handler.DownloadHanlder))
 	http.HandleFunc("/file/update", handlerWrapper(handler.FileMetaUpdateHandler))
 	http.HandleFunc("/file/delete", handlerWrapper(handler.FileDeleteHandler))

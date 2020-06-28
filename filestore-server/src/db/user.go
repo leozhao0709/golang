@@ -4,17 +4,17 @@ import (
 	"database/sql"
 
 	"github.com/labstack/gommon/log"
-	"github.com/leozhao0709/golang/filestore-server/src/common"
+	"github.com/leozhao0709/golang/filestore-server/src/common/formattime"
 )
 
 // User user model
 type User struct {
-	Username     string      `db:"user_name"`
-	Email        string      `db:"email"`
-	Phone        string      `db:"phone"`
-	SignupAt     common.Time `db:"signup_at"`
-	LastActiveAt common.Time `db:"last_active"`
-	Status       int         `db:"status"`
+	Username     string          `db:"user_name"`
+	Email        string          `db:"email"`
+	Phone        string          `db:"phone"`
+	SignupAt     formattime.Time `db:"signup_at"`
+	LastActiveAt formattime.Time `db:"last_active"`
+	Status       int             `db:"status"`
 }
 
 // UserSignup user sign up

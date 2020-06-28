@@ -8,16 +8,22 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/labstack/gommon/log"
+	"github.com/leozhao0709/golang/filestore-server/src/db"
 	"github.com/leozhao0709/golang/filestore-server/src/handler/handlererror"
+	"github.com/leozhao0709/golang/filestore-server/src/hooks"
 	"github.com/leozhao0709/golang/filestore-server/src/meta"
 	"github.com/leozhao0709/golang/filestore-server/src/util"
 )
 
 // UploadHandler handling file uploads
 func UploadHandler(w http.ResponseWriter, r *http.Request) *handlererror.HandleError {
+
+	hooks.UseAuth(w, r)
+
 	if r.Method == http.MethodGet {
 		bytes, err := ioutil.ReadFile("src/static/view/index.html")
 		if err != nil {
@@ -27,6 +33,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) *handlererror.HandleE
 	}
 	if r.Method == http.MethodPost {
 		file, header, err := r.FormFile("file")
+		username := r.FormValue("username")
 		if err != nil {
 			return handlererror.InternalServerError(err)
 		}
@@ -53,7 +60,6 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) *handlererror.HandleE
 		// must seek before you get filesha1
 		newFile.Seek(0, 0)
 		fileMeta.FileSha1 = util.FileSha1(newFile)
-		log.Debugf("stored filemeta is %+v", fileMeta)
 
 		// meta.UpdateFileMeta(fileMeta)
 		err = meta.UpdateFileMetaDB(fileMeta)
@@ -61,7 +67,13 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) *handlererror.HandleE
 			return handlererror.InternalServerError(err)
 		}
 
-		http.Redirect(w, r, "/file/upload/success", http.StatusFound)
+		// update userfile db
+		err = db.SaveUserFile(username, fileMeta.FileSha1, fileMeta.FileName, fileMeta.FileSize)
+		if err != nil {
+			return handlererror.InternalServerError(err)
+		}
+
+		http.Redirect(w, r, "/static/view/home.html", http.StatusFound)
 	}
 
 	return nil
@@ -75,8 +87,8 @@ func UploadSuccessHandler(w http.ResponseWriter, r *http.Request) *handlererror.
 
 // GetFileMetaHandler Get file meta data
 func GetFileMetaHandler(w http.ResponseWriter, r *http.Request) *handlererror.HandleError {
+	hooks.UseAuth(w, r)
 	filehash := r.FormValue("filehash")
-	log.Debug("file hash is ", filehash)
 	// filemeta, err := meta.GetFileMeta(filehash)
 	filemeta, err := meta.GetFileMetaDB(filehash)
 	if err != nil {
@@ -92,8 +104,31 @@ func GetFileMetaHandler(w http.ResponseWriter, r *http.Request) *handlererror.Ha
 	return nil
 }
 
+// QueryUserFileMetasHandler Query all user files with limit and username
+func QueryUserFileMetasHandler(w http.ResponseWriter, r *http.Request) *handlererror.HandleError {
+	hooks.UseAuth(w, r)
+	limit, err := strconv.Atoi(r.FormValue("limit"))
+	username := r.FormValue("username")
+	if err != nil {
+		return handlererror.InternalServerError(err)
+	}
+
+	userFileMetas, err := db.QueryUserFileMetas(username, limit)
+	if err != nil {
+		return handlererror.InternalServerError(err)
+	}
+
+	err = json.NewEncoder(w).Encode(userFileMetas)
+	if err != nil {
+		return handlererror.InternalServerError(err)
+	}
+
+	return nil
+}
+
 // DownloadHanlder download file handler
 func DownloadHanlder(w http.ResponseWriter, r *http.Request) *handlererror.HandleError {
+	hooks.UseAuth(w, r)
 	fileSha1 := r.FormValue("filehash")
 	log.Debug("file hash is ", fileSha1)
 	filemeta, err := meta.GetFileMeta(fileSha1)
@@ -119,7 +154,7 @@ func DownloadHanlder(w http.ResponseWriter, r *http.Request) *handlererror.Handl
 
 // FileMetaUpdateHandler update file name
 func FileMetaUpdateHandler(w http.ResponseWriter, r *http.Request) *handlererror.HandleError {
-
+	hooks.UseAuth(w, r)
 	if r.Method != http.MethodPost {
 		return handlererror.MethodNotAllowedError(r)
 	}
@@ -152,6 +187,7 @@ func FileMetaUpdateHandler(w http.ResponseWriter, r *http.Request) *handlererror
 
 // FileDeleteHandler delete file handler
 func FileDeleteHandler(w http.ResponseWriter, r *http.Request) *handlererror.HandleError {
+	hooks.UseAuth(w, r)
 	fileSha1 := r.FormValue("filehash")
 
 	filemeta, err := meta.RemoveFileMeta(fileSha1)

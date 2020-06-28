@@ -40,3 +40,8 @@ func NotFoundError(err error) *HandleError {
 func BadRequestError(err error) *HandleError {
 	return CreateError(http.StatusBadRequest, err)
 }
+
+// UnauthorizedRequestError the request is unauthorized
+func UnauthorizedRequestError(err error) *HandleError {
+	return CreateError(http.StatusUnauthorized, err)
+}

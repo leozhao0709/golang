@@ -1,4 +1,4 @@
-package common
+package formattime
 
 import (
 	"database/sql/driver"

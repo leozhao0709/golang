@@ -11,6 +11,7 @@ import (
 
 	"github.com/leozhao0709/golang/filestore-server/src/db"
 	"github.com/leozhao0709/golang/filestore-server/src/handler/handlererror"
+	"github.com/leozhao0709/golang/filestore-server/src/hooks"
 	"github.com/leozhao0709/golang/filestore-server/src/util"
 )
 
@@ -100,6 +101,11 @@ func SigninHandler(w http.ResponseWriter, r *http.Request) *handlererror.HandleE
 
 // UserInfoHandler user info handler
 func UserInfoHandler(w http.ResponseWriter, r *http.Request) *handlererror.HandleError {
+	err := hooks.UseAuth(w, r)
+	if err != nil {
+		return err
+	}
+
 	if r.Method == http.MethodPost {
 		username := strings.TrimSpace(r.FormValue("username"))
 		user, err := db.GetUserInfo(username)
@@ -121,12 +127,4 @@ func UserInfoHandler(w http.ResponseWriter, r *http.Request) *handlererror.Handl
 func generateToken(username string) string {
 	ts := strconv.Itoa(int(time.Now().Unix()))
 	return util.MD5([]byte(username+ts+"_tokensalt")) + ts[:8]
-}
-
-// IsTokenValid check if it's a valid user token
-func IsTokenValid(token string) bool {
-	if len(token) != 40 {
-		return false
-	}
-	return true
 }

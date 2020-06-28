@@ -68,3 +68,11 @@ func GetFileSize(filename string) int64 {
 	})
 	return result
 }
+
+// IsTokenValid check if it's a valid user token
+func IsTokenValid(token string) bool {
+	if len(token) != 40 {
+		return false
+	}
+	return true
+}
