@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/labstack/gommon/log"
-	"github.com/leozhao0709/golang/video-server/src/api/routes"
+	"github.com/leozhao0709/golang/video-server/src/api/user"
 )
 
 func main() {
@@ -25,7 +25,7 @@ func main() {
 	}))
 
 	// Routes
-	routes.RegisterUserRoute(e)
+	user.RegisterUserRoute(e)
 
 	// generate routes json file
 	data, _ := json.MarshalIndent(e.Routes(), "", "  ")
