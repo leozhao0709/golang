@@ -12,6 +12,7 @@ require (
 	github.com/labstack/gommon v0.3.0
 	github.com/onsi/ginkgo v1.12.3
 	github.com/onsi/gomega v1.10.1
+	github.com/streadway/amqp v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.1.0 // indirect
 	go.uber.org/zap v1.15.0
 )
