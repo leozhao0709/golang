@@ -33,6 +33,6 @@ func main() {
 	})
 
 	mq.SubscribePublishMessage(&queue, &rabbitmq.ReceiveConfig{AutoAck: true}, func(message amqp.Delivery) {
-		fmt.Println("receiver2 message", string(message.Body))
+		fmt.Println("receiver1 message", string(message.Body))
 	})
 }
