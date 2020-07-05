@@ -12,17 +12,19 @@ import (
 func main() {
 	mq, err := rabbitmq.New(&rabbitmq.Config{})
 	if err != nil {
-		log.Fatal("work mq conn err", err)
+		log.Fatal("pub mq conn err", err)
 	}
 	defer mq.Destory()
 
-	queue, err := mq.DeclareQueue(&rabbitmq.QueueConfig{QueueName: "workmq"})
-	if err != nil {
-		log.Fatal("work mq declare queue err", err)
-	}
+	mq.DeclarePublishExchange(&rabbitmq.ExchangeConfig{
+		ExchangeName: "logs",
+	})
 
 	for i := 0; i < 100; i++ {
-		mq.SendWorkMessage(&queue, nil, amqp.Publishing{ContentType: "text/plain", Body: []byte(fmt.Sprint("message", i))})
+		mq.SendPublishMessage(&rabbitmq.PublishConfig{
+			ExchangeName: "logs",
+			RoutingKey:   "",
+		}, amqp.Publishing{ContentType: "text/plain", Body: []byte(fmt.Sprint("message", i))})
 		time.Sleep(time.Second)
 	}
 }
