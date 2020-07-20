@@ -2,10 +2,37 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"time"
 )
 
+func init() {
+	os.Setenv("TZ", "Asia/Shanghai")
+}
+
 func main() {
+	// basicTest()
+	// timeZoneTest()
+
+	fmt.Println(time.Now())
+}
+
+func timeZoneTest() {
+	now := time.Now()
+	fmt.Println(now)
+
+	time.Now().UTC().Zone()
+	loc, err := time.LoadLocation("Asia/Shanghai")
+	if err != nil {
+		fmt.Println("load location error", err)
+		return
+	}
+
+	localTime := now.In(loc)
+	fmt.Println(localTime)
+}
+
+func basicTest() {
 	now := time.Now()
 	fmt.Println(now)
 
