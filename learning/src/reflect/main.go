@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
 )
@@ -57,30 +58,70 @@ func nilValidTest() {
 	fmt.Println("map中不存在的键：", reflect.ValueOf(c).MapIndex(reflect.ValueOf("娜扎")).IsValid())
 }
 
-type stu struct {
+type person struct {
 	name string
+}
+
+type stu struct {
+	Name    string
+	Age     int
+	Teacher person
 }
 
 type stuDto struct {
-	name string
+	Name    string
+	Height  int
+	Teacher person
 }
 
-func copyProperties(s *stu, sd *stuDto) {
-	sv := reflect.ValueOf(s)
-	// st := reflect.TypeOf(s)
+func copyProperties(source interface{}, target interface{}) error {
+	paramIsValid := func(data interface{}) bool {
+		reflectTypeKind := reflect.TypeOf(data).Kind()
+		return reflectTypeKind == reflect.Array ||
+			reflectTypeKind == reflect.Chan ||
+			reflectTypeKind == reflect.Slice ||
+			reflectTypeKind == reflect.Map ||
+			reflectTypeKind == reflect.Ptr
+	}
 
-	sdv := reflect.ValueOf(sd)
-	sdv.Elem().FieldByName("name").Set(sv.FieldByName("name"))
+	if !paramIsValid(source) || !paramIsValid(target) {
+		return errors.New("Copy error: source and target must be Array, Chan, Slice, Map or Ptr")
+	}
+
+	sourceType := reflect.TypeOf(source).Elem()
+	sourceVal := reflect.ValueOf(source).Elem()
+	targetType := reflect.TypeOf(target).Elem()
+	targetVal := reflect.ValueOf(target).Elem()
+
+	for i := 0; i < sourceType.NumField(); i++ {
+		sourceField := sourceType.Field(i)
+		targetField, ok := targetType.FieldByName(sourceField.Name)
+		if ok {
+			if sourceField.Type != targetField.Type {
+				return fmt.Errorf(`Copy error: source field "%v" type is %v, but target field "%v" type is %v`, sourceField.Name, sourceField.Type, targetField.Name, targetField.Type)
+			}
+			targetVal.FieldByName(sourceField.Name).Set(sourceVal.Field(i))
+		}
+	}
+
+	return nil
 }
 
 func testCopy() {
-	s := &stu{name: "student"}
-	sd := &stuDto{}
+	name := "testName"
+	age := 18
+	s := stu{Name: name, Age: age, Teacher: person{name: "teacherName"}}
+	sd := stuDto{}
 
-	copyProperties(s, sd)
+	err := copyProperties(&s, &sd)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
-	fmt.Println("...student...", s)
-	fmt.Println("...studentDto...", sd)
+	fmt.Printf("%+v, %+v\n", s, sd)
+	s.Name = "newName"
+	fmt.Printf("%+v, %+v\n", s, sd)
 }
 
 func main() {
