@@ -6,5 +6,7 @@ func main() {
 	// useWg2()
 	// useSelect()
 	// useMutex()
-	useRwmutex()
+	// useRwmutex()
+	// useSyncOnce()
+	useAtomic()
 }
