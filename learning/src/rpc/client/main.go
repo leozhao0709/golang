@@ -11,6 +11,7 @@ func main() {
 		fmt.Println("err", err)
 		return
 	}
+	defer cli.Close()
 
 	var pd int
 	err = cli.Call("Panda.GetInfo", 10086, &pd)
