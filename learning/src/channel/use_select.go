@@ -49,5 +49,5 @@ func service2(c chan<- string) {
 	resTime := rand.Intn(200)
 	fmt.Println("service2 resTime is", resTime)
 	time.Sleep(time.Millisecond * time.Duration(resTime))
-	c <- "service1 response"
+	c <- "service2 response"
 }

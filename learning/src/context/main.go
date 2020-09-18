@@ -7,28 +7,32 @@ import (
 	"time"
 )
 
-func f1(ctx context.Context) {
+var wg sync.WaitGroup
+
+func worker(ctx context.Context) {
 	defer wg.Done()
+LOOP:
 	for {
-		fmt.Println("f1....")
-		time.Sleep(time.Millisecond * 500)
+		fmt.Println("db connecting ...")
+		time.Sleep(time.Millisecond * 10) // 假设正常连接数据库耗时10毫秒
 		select {
-		case <-ctx.Done():
-			return
+		case <-ctx.Done(): // 50毫秒后自动调用
+			fmt.Println("timeout...")
+			break LOOP
 		default:
 		}
 	}
+	fmt.Println("worker done!")
 }
 
-var wg sync.WaitGroup
-
 func main() {
-
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+	// 设置一个50毫秒的超时
+	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*50)
+	defer cancel() // 通知子goroutine结束
 
 	wg.Add(1)
-	go f1(ctx)
+	go worker(ctx)
 	time.Sleep(time.Second * 5)
 	wg.Wait()
+	fmt.Println("over")
 }

@@ -4,9 +4,9 @@ func main() {
 	// useChannel()
 	// useWg()
 	// useWg2()
-	// useSelect()
+	useSelect()
 	// useMutex()
 	// useRwmutex()
 	// useSyncOnce()
-	useAtomic()
+	// useAtomic()
 }

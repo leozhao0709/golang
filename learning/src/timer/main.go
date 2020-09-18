@@ -28,8 +28,8 @@ func timeTicker() {
 
 	for {
 		select {
-		case <-ticker.C:
-			fmt.Println("currentTime:", time.Now())
+		case now := <-ticker.C:
+			fmt.Println("currentTime:", now)
 		default:
 		}
 	}
