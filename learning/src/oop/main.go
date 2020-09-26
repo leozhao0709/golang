@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 )
 
@@ -20,16 +19,19 @@ func (a *A) hello() {
 
 type B struct {
 	A
-	// Name string
 }
 
-// func (b *B) SayOk() {
-// 	fmt.Println("B SayOk", b.Name)
-// }
+func (b *B) SayOk() {
+	fmt.Println("B SayOk", b.Name)
+}
 
 func main() {
-	var b = B{}
-	b.Name = "b"
+	var b = B{
+		A: A{
+			Name: "b",
+		},
+	}
+	// b.Name = "b"
 	// b.A.Name = "a"
 	b.Age = 18
 
@@ -39,9 +41,9 @@ func main() {
 	b.hello()
 
 	// b2 := B{Name: "b2", A: A{Name: "a", Age: 18}}
-	b2 := B{A: A{Name: "a", Age: 18}}
-	fmt.Printf("%+v\n", b2)
+	// b2 := B{A: A{Name: "a", Age: 18}}
+	// fmt.Printf("%+v\n", b2)
 
-	jsonStr, _ := json.Marshal(&b2)
-	fmt.Println(string(jsonStr))
+	// jsonStr, _ := json.Marshal(&b2)
+	// fmt.Println(string(jsonStr))
 }
