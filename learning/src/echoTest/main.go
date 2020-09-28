@@ -2,7 +2,6 @@ package main
 
 import (
 	"net/http"
-	"time"
 
 	// "github.com/gookit/color"
 	"github.com/labstack/echo"
@@ -33,7 +32,7 @@ func main() {
 	})
 
 	e.GET("/", func(c echo.Context) error {
-		<-time.After(time.Second * 5)
+		// <-time.After(time.Second * 5)
 		return c.String(http.StatusOK, "Hello Golang")
 	})
 	e.Logger.Fatal(e.Start(":8080"))
