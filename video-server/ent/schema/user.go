@@ -23,7 +23,7 @@ func (User) Mixin() []ent.Mixin {
 func (User) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("username").NotEmpty().Unique(),
-		field.String("password").NotEmpty(),
+		field.String("password").NotEmpty().Sensitive(),
 	}
 }
 
