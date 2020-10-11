@@ -1,0 +1,10 @@
+host: localhost
+database: boostore_user
+port: 3306
+
+dev:
+  username: root
+  password: 
+
+prod:
+  database: prod_db

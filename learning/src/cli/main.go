@@ -26,5 +26,6 @@ func useFlag() {
 	var port *int = flag.Int("p", 3306, "port description")
 
 	flag.Parse()
+	flag.PrintDefaults()
 	fmt.Printf("user=%v, pwd=%v, host=%v, port=%v\n", *user, *pwd, *host, *port)
 }
