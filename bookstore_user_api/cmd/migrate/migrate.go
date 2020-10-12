@@ -5,13 +5,17 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/labstack/gommon/log"
+	"github.com/leozhao0709/golang/bookstore_user_api/config/dbconfig"
 	"github.com/leozhao0709/golang/bookstore_user_api/ent"
 	"github.com/leozhao0709/golang/bookstore_user_api/ent/migrate"
 )
 
 // add project ent/migrate dependency before
 func main() {
-	client, err := ent.Open("mysql", "lzhao:12345@tcp(127.0.0.1:3306)/bookstore_user?parseTime=true")
+	config := dbconfig.GetConfig()
+	datasource := config.GetDataSource()
+	dbDriver := config.GetDriver()
+	client, err := ent.Open(dbDriver, datasource)
 	if err != nil {
 		log.Fatalf("failed connecting to mysql: %v", err)
 	}

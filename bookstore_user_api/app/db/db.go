@@ -4,39 +4,43 @@ import (
 	"sync"
 	"time"
 
-	"database/sql"
-
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/labstack/gommon/log"
+	"github.com/leozhao0709/golang/bookstore_user_api/config/dbconfig"
 	"github.com/leozhao0709/golang/bookstore_user_api/ent"
 
-	entsql "github.com/facebook/ent/dialect/sql"
+	"github.com/facebook/ent/dialect/sql"
 )
 
 var once sync.Once
 
 // please add project ent dependency before
 var client *ent.Client
-var connectError error
 
 // GetEntClient new ent client
-func GetEntClient() (*ent.Client, error) {
+func GetEntClient() *ent.Client {
 
 	once.Do(func() {
-		db, err := sql.Open("mysql", "[yourDbConnection]?parseTime=true")
+		config := dbconfig.GetConfig()
+		datasource := config.GetDataSource()
+		dbDriver := config.GetDriver()
+		maxIdleConns := config.GetMaxIdleConns()
+		maxOpenConns := config.GetMaxOpenConns()
+		connMaxLifetime := config.GetConnMaxLifetime()
+
+		drv, err := sql.Open(dbDriver, datasource)
 		if err != nil {
-			client = nil
-			connectError = err
+			log.Fatalf("Get ent client error: %v", err)
 		}
 
 		// Get the underlying sql.DB object of the driver.
-		db.SetMaxIdleConns(10)
-		db.SetMaxOpenConns(100)
-		db.SetConnMaxLifetime(time.Hour)
+		db := drv.DB()
+		db.SetMaxIdleConns(maxIdleConns)
+		db.SetMaxOpenConns(maxOpenConns)
+		db.SetConnMaxLifetime(time.Second * time.Duration(connMaxLifetime))
 
-		// Create an ent.Driver from `db`.
-		drv := entsql.OpenDB("mysql", db)
 		client = ent.NewClient(ent.Driver(drv)).Debug()
 	})
 
-	return client, connectError
+	return client
 }
