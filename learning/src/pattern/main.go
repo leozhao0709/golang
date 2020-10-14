@@ -7,9 +7,12 @@ import (
 )
 
 func main() {
-	srv1 := user.Service
-	srv2 := user.Service
+	var srv1 = user.Service
+	var srv2 = user.Service
 
 	fmt.Printf("...srv1 %p", srv1)
 	fmt.Printf("...srv2 %p", srv2)
+
+	var age1 = srv1.GetAge()
+	fmt.Println(age1)
 }
