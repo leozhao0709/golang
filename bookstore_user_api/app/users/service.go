@@ -1,6 +1,9 @@
 package users
 
-import "github.com/leozhao0709/golang/bookstore_user_api/app/common"
+import (
+	"github.com/labstack/gommon/log"
+	"github.com/leozhao0709/golang/bookstore_user_api/app/common"
+)
 
 var (
 	// Service user service
@@ -19,6 +22,7 @@ type IService interface {
 type service struct{}
 
 func (srv *service) CreateUser(u User) (common.IResponse, common.IErrorResponse) {
+	log.Debugf("...%+v", u)
 	return common.SuccessResponse(100, u), nil
 }
 

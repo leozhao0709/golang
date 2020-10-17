@@ -18,12 +18,10 @@ func main() {
 
 	if environment != "prod" {
 		e.Debug = true
+		log.SetLevel(log.DEBUG)
 	}
 
-	// log
-	if l, ok := e.Logger.(*log.Logger); ok {
-		l.SetHeader("[${time_rfc3339}] ${level}")
-	}
+	log.SetHeader("[${time_rfc3339}] ${level} ${long_file}:${line}")
 
 	// middleware
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{

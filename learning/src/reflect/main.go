@@ -77,6 +77,7 @@ type stuDto struct {
 func copyProperties(source interface{}, target interface{}) error {
 	paramIsValid := func(data interface{}) bool {
 		reflectTypeKind := reflect.TypeOf(data).Kind()
+		fmt.Println(reflectTypeKind)
 		return reflectTypeKind == reflect.Array ||
 			reflectTypeKind == reflect.Chan ||
 			reflectTypeKind == reflect.Slice ||
