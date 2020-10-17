@@ -14,7 +14,7 @@ func createUserHandler(c echo.Context) error {
 		return err
 	}
 
-	response, err := Service.CreateUser(*u)
+	response, err := Service.CreateUser(c, *u)
 	if err != nil {
 		return err
 	}
