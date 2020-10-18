@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/facebook/ent/dialect/sql"
+	"github.com/google/uuid"
 	"github.com/leozhao0709/golang/bookstore_user_api/ent/user"
 )
 
@@ -20,6 +21,8 @@ type User struct {
 	CreateTime time.Time `json:"create_time,omitempty"`
 	// UpdateTime holds the value of the "update_time" field.
 	UpdateTime time.Time `json:"update_time,omitempty"`
+	// UserID holds the value of the "user_id" field.
+	UserID uuid.UUID `json:"user_id,omitempty"`
 	// FirstName holds the value of the "first_name" field.
 	FirstName string `json:"first_name,omitempty"`
 	// LastName holds the value of the "last_name" field.
@@ -38,6 +41,7 @@ func (*User) scanValues() []interface{} {
 		&sql.NullInt64{},  // id
 		&sql.NullTime{},   // create_time
 		&sql.NullTime{},   // update_time
+		&uuid.UUID{},      // user_id
 		&sql.NullString{}, // first_name
 		&sql.NullString{}, // last_name
 		&sql.NullString{}, // status
@@ -68,28 +72,33 @@ func (u *User) assignValues(values ...interface{}) error {
 	} else if value.Valid {
 		u.UpdateTime = value.Time
 	}
-	if value, ok := values[2].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field first_name", values[2])
+	if value, ok := values[2].(*uuid.UUID); !ok {
+		return fmt.Errorf("unexpected type %T for field user_id", values[2])
+	} else if value != nil {
+		u.UserID = *value
+	}
+	if value, ok := values[3].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field first_name", values[3])
 	} else if value.Valid {
 		u.FirstName = value.String
 	}
-	if value, ok := values[3].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field last_name", values[3])
+	if value, ok := values[4].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field last_name", values[4])
 	} else if value.Valid {
 		u.LastName = value.String
 	}
-	if value, ok := values[4].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field status", values[4])
+	if value, ok := values[5].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field status", values[5])
 	} else if value.Valid {
 		u.Status = value.String
 	}
-	if value, ok := values[5].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field email", values[5])
+	if value, ok := values[6].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field email", values[6])
 	} else if value.Valid {
 		u.Email = value.String
 	}
-	if value, ok := values[6].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field password", values[6])
+	if value, ok := values[7].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field password", values[7])
 	} else if value.Valid {
 		u.Password = value.String
 	}
@@ -123,6 +132,8 @@ func (u *User) String() string {
 	builder.WriteString(u.CreateTime.Format(time.ANSIC))
 	builder.WriteString(", update_time=")
 	builder.WriteString(u.UpdateTime.Format(time.ANSIC))
+	builder.WriteString(", user_id=")
+	builder.WriteString(fmt.Sprintf("%v", u.UserID))
 	builder.WriteString(", first_name=")
 	builder.WriteString(u.FirstName)
 	builder.WriteString(", last_name=")

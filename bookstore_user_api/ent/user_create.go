@@ -10,6 +10,7 @@ import (
 
 	"github.com/facebook/ent/dialect/sql/sqlgraph"
 	"github.com/facebook/ent/schema/field"
+	"github.com/google/uuid"
 	"github.com/leozhao0709/golang/bookstore_user_api/ent/user"
 )
 
@@ -45,6 +46,12 @@ func (uc *UserCreate) SetNillableUpdateTime(t *time.Time) *UserCreate {
 	if t != nil {
 		uc.SetUpdateTime(*t)
 	}
+	return uc
+}
+
+// SetUserID sets the user_id field.
+func (uc *UserCreate) SetUserID(u uuid.UUID) *UserCreate {
+	uc.mutation.SetUserID(u)
 	return uc
 }
 
@@ -146,6 +153,10 @@ func (uc *UserCreate) defaults() {
 		v := user.DefaultUpdateTime()
 		uc.mutation.SetUpdateTime(v)
 	}
+	if _, ok := uc.mutation.UserID(); !ok {
+		v := user.DefaultUserID()
+		uc.mutation.SetUserID(v)
+	}
 	if _, ok := uc.mutation.Status(); !ok {
 		v := user.DefaultStatus
 		uc.mutation.SetStatus(v)
@@ -159,6 +170,9 @@ func (uc *UserCreate) check() error {
 	}
 	if _, ok := uc.mutation.UpdateTime(); !ok {
 		return &ValidationError{Name: "update_time", err: errors.New("ent: missing required field \"update_time\"")}
+	}
+	if _, ok := uc.mutation.UserID(); !ok {
+		return &ValidationError{Name: "user_id", err: errors.New("ent: missing required field \"user_id\"")}
 	}
 	if _, ok := uc.mutation.FirstName(); !ok {
 		return &ValidationError{Name: "first_name", err: errors.New("ent: missing required field \"first_name\"")}
@@ -224,6 +238,14 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			Column: user.FieldUpdateTime,
 		})
 		_node.UpdateTime = value
+	}
+	if value, ok := uc.mutation.UserID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Value:  value,
+			Column: user.FieldUserID,
+		})
+		_node.UserID = value
 	}
 	if value, ok := uc.mutation.FirstName(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

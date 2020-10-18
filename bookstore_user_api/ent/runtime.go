@@ -5,6 +5,7 @@ package ent
 import (
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/leozhao0709/golang/bookstore_user_api/ent/schema"
 	"github.com/leozhao0709/golang/bookstore_user_api/ent/user"
 )
@@ -27,16 +28,20 @@ func init() {
 	user.DefaultUpdateTime = userDescUpdateTime.Default.(func() time.Time)
 	// user.UpdateDefaultUpdateTime holds the default value on update for the update_time field.
 	user.UpdateDefaultUpdateTime = userDescUpdateTime.UpdateDefault.(func() time.Time)
+	// userDescUserID is the schema descriptor for user_id field.
+	userDescUserID := userFields[0].Descriptor()
+	// user.DefaultUserID holds the default value on creation for the user_id field.
+	user.DefaultUserID = userDescUserID.Default.(func() uuid.UUID)
 	// userDescStatus is the schema descriptor for status field.
-	userDescStatus := userFields[2].Descriptor()
+	userDescStatus := userFields[3].Descriptor()
 	// user.DefaultStatus holds the default value on creation for the status field.
 	user.DefaultStatus = userDescStatus.Default.(string)
 	// userDescEmail is the schema descriptor for email field.
-	userDescEmail := userFields[3].Descriptor()
+	userDescEmail := userFields[4].Descriptor()
 	// user.EmailValidator is a validator for the "email" field. It is called by the builders before save.
 	user.EmailValidator = userDescEmail.Validators[0].(func(string) error)
 	// userDescPassword is the schema descriptor for password field.
-	userDescPassword := userFields[4].Descriptor()
+	userDescPassword := userFields[5].Descriptor()
 	// user.PasswordValidator is a validator for the "password" field. It is called by the builders before save.
 	user.PasswordValidator = userDescPassword.Validators[0].(func(string) error)
 }

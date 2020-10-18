@@ -4,6 +4,8 @@ package user
 
 import (
 	"time"
+
+	"github.com/google/uuid"
 )
 
 const (
@@ -15,6 +17,8 @@ const (
 	FieldCreateTime = "create_time"
 	// FieldUpdateTime holds the string denoting the update_time field in the database.
 	FieldUpdateTime = "update_time"
+	// FieldUserID holds the string denoting the user_id field in the database.
+	FieldUserID = "user_id"
 	// FieldFirstName holds the string denoting the first_name field in the database.
 	FieldFirstName = "first_name"
 	// FieldLastName holds the string denoting the last_name field in the database.
@@ -35,6 +39,7 @@ var Columns = []string{
 	FieldID,
 	FieldCreateTime,
 	FieldUpdateTime,
+	FieldUserID,
 	FieldFirstName,
 	FieldLastName,
 	FieldStatus,
@@ -59,6 +64,8 @@ var (
 	DefaultUpdateTime func() time.Time
 	// UpdateDefaultUpdateTime holds the default value on update for the update_time field.
 	UpdateDefaultUpdateTime func() time.Time
+	// DefaultUserID holds the default value on creation for the user_id field.
+	DefaultUserID func() uuid.UUID
 	// DefaultStatus holds the default value on creation for the status field.
 	DefaultStatus string
 	// EmailValidator is a validator for the "email" field. It is called by the builders before save.
