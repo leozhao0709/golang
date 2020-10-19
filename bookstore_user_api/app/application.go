@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"net/http"
@@ -11,8 +11,8 @@ import (
 	"github.com/leozhao0709/golang/bookstore_user_api/env"
 )
 
-func main() {
-
+// StartApplication app entry point
+func StartApplication() {
 	var environment = env.GetCurrentEnv()
 
 	e := echo.New()

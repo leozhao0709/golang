@@ -4,8 +4,8 @@
   ],
   "ext": "go",
   "ignore": [
-    "src/**/*_test.go"
+    "**/*_test.go"
   ],
-  "exec": "go run -race ./app/main.go",
+  "exec": "go run -race main.go",
   "signal": "SIGTERM"
 }
