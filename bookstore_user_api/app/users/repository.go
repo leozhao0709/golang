@@ -5,9 +5,10 @@ import (
 	"sync"
 
 	"github.com/google/uuid"
-	"github.com/leozhao0709/golang/bookstore_user_api/app/common"
+
 	"github.com/leozhao0709/golang/bookstore_user_api/ent"
 	"github.com/leozhao0709/golang/bookstore_user_api/ent/user"
+	"github.com/leozhao0709/musings/common"
 )
 
 var (

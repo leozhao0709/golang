@@ -8,7 +8,7 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/go-ozzo/ozzo-validation/v4/is"
 	"github.com/google/uuid"
-	"github.com/leozhao0709/golang/bookstore_user_api/app/common"
+	"github.com/leozhao0709/musings/common"
 	"github.com/leozhao0709/musings/reflect"
 	"golang.org/x/crypto/bcrypt"
 )

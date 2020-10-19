@@ -10,7 +10,7 @@ require (
 	github.com/google/wire v0.4.0
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/gommon v0.3.0
-	github.com/leozhao0709/musings v0.0.0-20201018215136-6d0b1d0d2df7
+	github.com/leozhao0709/musings v0.0.0-20201019030500-a9a73db20a5e
 	github.com/spf13/viper v1.7.1
 	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897
 )

@@ -2,7 +2,7 @@ package errorhandler
 
 import (
 	"github.com/labstack/echo"
-	"github.com/leozhao0709/golang/bookstore_user_api/app/common"
+	"github.com/leozhao0709/musings/common"
 )
 
 // RestfulHandler ...

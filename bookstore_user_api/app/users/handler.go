@@ -4,7 +4,7 @@ import (
 	"sync"
 
 	"github.com/labstack/echo"
-	"github.com/leozhao0709/golang/bookstore_user_api/app/common"
+	"github.com/leozhao0709/musings/common"
 	"github.com/leozhao0709/musings/reflect"
 )
 
