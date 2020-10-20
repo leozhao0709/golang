@@ -4,6 +4,7 @@ import (
 	"sync"
 
 	"github.com/labstack/echo"
+	"github.com/labstack/gommon/log"
 	"github.com/leozhao0709/musings/common"
 	"github.com/leozhao0709/musings/reflect"
 )
@@ -38,6 +39,7 @@ func GetHandler(service IService) IHandler {
 func (h *handler) getUser(c echo.Context) error {
 	userID := c.Param("user_id")
 
+	log.Info("...", c.Request().Header.Get("Authorization"))
 	u, err := h.service.GetUser(c.Request().Context(), userID)
 	if err != nil {
 		return err

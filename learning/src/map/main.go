@@ -38,6 +38,12 @@ func main() {
 	for key, value := range map2 {
 		fmt.Println(key, value)
 	}
+
+	var map3 *map[string]string = &map[string]string{}
+	(*map3)["a"] = "a"
+	fmt.Println(map3)
+	map3 = nil
+	fmt.Println(map3)
 }
 
 func basicMap() {
