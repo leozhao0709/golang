@@ -13,8 +13,8 @@ type monster struct {
 }
 
 func main() {
-	// testStruct()
-	testMap()
+	testStruct()
+	// testMap()
 }
 
 func testMap() {

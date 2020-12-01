@@ -1,6 +1,7 @@
 package users
 
 import (
+	"net/http"
 	"sync"
 
 	"github.com/labstack/echo"
@@ -20,6 +21,7 @@ type IHandler interface {
 	createUser(c echo.Context) error
 	deleteUser(c echo.Context) error
 	updateUser(c echo.Context) error
+	test(c echo.Context) error
 }
 
 type handler struct {
@@ -36,9 +38,20 @@ func GetHandler(service IService) IHandler {
 	return h
 }
 
+type testMessage struct {
+	Test1 string
+	Test2 int
+}
+
+func (h *handler) test(c echo.Context) error {
+	return c.Render(http.StatusOK, "message", testMessage{
+		Test1: "test1",
+		Test2: 25,
+	})
+}
+
 func (h *handler) getUser(c echo.Context) error {
 	userID := c.Param("user_id")
-
 	log.Info("...", c.Request().Header.Get("Authorization"))
 	u, err := h.service.GetUser(c.Request().Context(), userID)
 	if err != nil {

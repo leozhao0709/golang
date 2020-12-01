@@ -1,6 +1,8 @@
 package app
 
 import (
+	"html/template"
+	"io"
 	"net/http"
 
 	"github.com/labstack/echo"
@@ -11,11 +13,24 @@ import (
 	"github.com/leozhao0709/golang/bookstore_user_api/env"
 )
 
+type Template struct {
+	templates *template.Template
+}
+
+func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+	return t.templates.ExecuteTemplate(w, name, data)
+}
+
 // StartApplication app entry point
 func StartApplication() {
 	var environment = env.GetCurrentEnv()
 
+	t := &Template{
+		templates: template.Must(template.ParseGlob("app/public/views/*.html")),
+	}
+
 	e := echo.New()
+	e.Renderer = t
 
 	if environment != "prod" {
 		e.Debug = true
