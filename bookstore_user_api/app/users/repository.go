@@ -12,14 +12,14 @@ import (
 )
 
 var (
-	r     *repositroy
+	r     *repository
 	rOnce sync.Once
 )
 
 // GetRepository ...
 func GetRepository(client *ent.UserClient) IRepository {
 	rOnce.Do(func() {
-		r = &repositroy{
+		r = &repository{
 			client: client,
 		}
 	})
@@ -36,19 +36,19 @@ type IRepository interface {
 	DeleteUser(ctx context.Context, userID uuid.UUID) (int, error)
 }
 
-type repositroy struct {
+type repository struct {
 	client *ent.UserClient
 }
 
-func (r *repositroy) IsUserExist(ctx context.Context, u *User) (bool, error) {
+func (r *repository) IsUserExist(ctx context.Context, u *User) (bool, error) {
 	return r.client.Query().Where(user.EmailEQ(u.Email)).Limit(1).Exist(ctx)
 }
 
-func (r *repositroy) CreateUser(ctx context.Context, u *User) (*ent.User, error) {
+func (r *repository) CreateUser(ctx context.Context, u *User) (*ent.User, error) {
 	return r.client.Create().SetEmail(u.Email).SetPassword(u.Password).SetFirstName(u.FirstName).SetLastName(u.LastName).Save(ctx)
 }
 
-func (r *repositroy) GetUser(ctx context.Context, userID uuid.UUID) (*ent.User, error) {
+func (r *repository) GetUser(ctx context.Context, userID uuid.UUID) (*ent.User, error) {
 	users, err := r.client.Query().Where(user.UserIDEQ(userID)).Limit(1).All(ctx)
 	if err != nil {
 		return nil, common.InternalServerError(err)
@@ -61,7 +61,7 @@ func (r *repositroy) GetUser(ctx context.Context, userID uuid.UUID) (*ent.User, 
 	return users[0], nil
 }
 
-func (r *repositroy) UpdateUser(ctx context.Context, userID uuid.UUID, u *User) (int, error) {
+func (r *repository) UpdateUser(ctx context.Context, userID uuid.UUID, u *User) (int, error) {
 	entBuilder := r.client.Update().Where(user.UserIDEQ(userID))
 
 	if u.Email != "" {
@@ -87,6 +87,6 @@ func (r *repositroy) UpdateUser(ctx context.Context, userID uuid.UUID, u *User) 
 	return entBuilder.Save(ctx)
 }
 
-func (r *repositroy) DeleteUser(ctx context.Context, userID uuid.UUID) (int, error) {
+func (r *repository) DeleteUser(ctx context.Context, userID uuid.UUID) (int, error) {
 	return r.client.Delete().Where(user.UserIDEQ(userID)).Exec(ctx)
 }

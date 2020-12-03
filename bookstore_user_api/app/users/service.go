@@ -22,7 +22,7 @@ var (
 func GetService(repositroy IRepository) IService {
 	sOnce.Do(func() {
 		s = &service{
-			repositroy: repositroy,
+			repository: repositroy,
 		}
 	})
 
@@ -39,7 +39,7 @@ type IService interface {
 }
 
 type service struct {
-	repositroy IRepository
+	repository IRepository
 }
 
 func (s *service) CreateUser(ctx context.Context, u *User) (*User, error) {
@@ -48,7 +48,7 @@ func (s *service) CreateUser(ctx context.Context, u *User) (*User, error) {
 		return nil, common.BadRequestError(common.RequestValidationErrCode, err)
 	}
 
-	exist, err := s.repositroy.IsUserExist(ctx, u)
+	exist, err := s.repository.IsUserExist(ctx, u)
 	if err != nil {
 		return nil, common.InternalServerError(err)
 	}
@@ -63,8 +63,7 @@ func (s *service) CreateUser(ctx context.Context, u *User) (*User, error) {
 	}
 
 	u.Password = string(hashedPassword)
-
-	entUser, err := s.repositroy.CreateUser(ctx, u)
+	entUser, err := s.repository.CreateUser(ctx, u)
 
 	if err != nil {
 		return nil, common.InternalServerError(err)
@@ -82,7 +81,7 @@ func (s *service) GetUser(ctx context.Context, userID string) (*User, error) {
 		return nil, common.BadRequestError(BadUserIDCode, err)
 	}
 
-	entUser, err := s.repositroy.GetUser(ctx, uid)
+	entUser, err := s.repository.GetUser(ctx, uid)
 	if err != nil {
 		return nil, common.InternalServerError(err)
 	}
@@ -116,7 +115,7 @@ func (s *service) UpdateUser(ctx context.Context, userID string, u *User) (int, 
 		u.Password = string(hashedPassword)
 	}
 
-	return s.repositroy.UpdateUser(ctx, uid, u)
+	return s.repository.UpdateUser(ctx, uid, u)
 }
 
 func (s *service) DeleteUser(ctx context.Context, userID string) (int, error) {
@@ -126,7 +125,7 @@ func (s *service) DeleteUser(ctx context.Context, userID string) (int, error) {
 		return 0, common.BadRequestError(BadUserIDCode, err)
 	}
 
-	return s.repositroy.DeleteUser(ctx, uid)
+	return s.repository.DeleteUser(ctx, uid)
 }
 
 // func (s *service) SearchUser(string) (User, error) {
