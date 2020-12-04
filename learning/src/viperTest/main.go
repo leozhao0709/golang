@@ -27,11 +27,18 @@ type DbConfig struct {
 }
 
 func main() {
-	viper.SetConfigFile("src/viperTest/db.yml")
+	viper.SetConfigFile("src/viperTest/config/config1/db.yml")
 	viper.BindEnv("password", "MYSQL_PASSWORD")
 	viper.BindEnv("username", "MYSQL_USER")
 	err := viper.ReadInConfig() // Find and read the config file
 	if err != nil {             // Handle errors reading the config file
+		log.Fatalf("read db config error: %v", err)
+	}
+
+	// merge db2.yml
+	viper.SetConfigFile("src/viperTest/config/config2/db.yml")
+	err = viper.ReadInConfig()
+	if err != nil { // Handle errors reading the config file
 		log.Fatalf("read db config error: %v", err)
 	}
 
