@@ -42,7 +42,7 @@ func GetConfig() IDbConfig {
 		dbViper.SetConfigFile("config/dbconfig/db_test.yml")
 	default: // dev
 		dbViper.SetConfigFile("config/dbconfig/db_dev.yml")
-		dbViper.BindEnv("username", "MYSQL_USER")
+		dbViper.BindEnv("username", "MYSQL_USERNAME")
 		dbViper.BindEnv("password", "MYSQL_PASSWORD")
 	}
 

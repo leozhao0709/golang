@@ -1,0 +1,3 @@
+host: db.config.com
+database: boostore_user
+port: 3306
