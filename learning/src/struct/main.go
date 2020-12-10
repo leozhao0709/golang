@@ -21,6 +21,14 @@ type react struct {
 	leftUp, rightDown *pointer
 }
 
+func test(x *pointer) (*pointer, error)  {
+	if x.x == 0 {
+		return nil, fmt.Errorf("error")
+	}
+
+	return &pointer{x: 10}, nil
+}
+
 func main() {
 	p1 := person{name: "Lei", age: 28}
 	fmt.Printf("%+v\n", p1)
@@ -61,6 +69,11 @@ func main() {
 	p4.react.leftUp = &pointer{10}
 	fmt.Printf("p4 r leftUp address: %p\n", p4.react.leftUp)
 	fmt.Printf("p4 leftUp address: %p\n", p4.leftUp)
+
+	r1 := react{}
+	v, _ := test(r1.leftUp)
+	fmt.Print(v.x)
+
 }
 
 func changeName(p *person) {

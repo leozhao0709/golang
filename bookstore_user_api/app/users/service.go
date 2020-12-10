@@ -19,10 +19,10 @@ var (
 )
 
 // GetService ...
-func GetService(repositroy IRepository) IService {
+func GetService(repository IRepository) IService {
 	sOnce.Do(func() {
 		s = &service{
-			repository: repositroy,
+			repository: repository,
 		}
 	})
 

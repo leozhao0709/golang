@@ -17,7 +17,6 @@ type IDbConfig interface {
 	GetConnMaxLifetime() int
 }
 
-// DbConfig db config struct
 type dbConfig struct {
 	Driver          string
 	Host            string
@@ -43,7 +42,7 @@ func GetConfig() IDbConfig {
 		dbViper.SetConfigFile("config/dbconfig/db_test.yml")
 	default: // dev
 		dbViper.SetConfigFile("config/dbconfig/db_dev.yml")
-		dbViper.BindEnv("username", "MYSQL_USER")
+		dbViper.BindEnv("username", "MYSQL_USERNAME")
 		dbViper.BindEnv("password", "MYSQL_PASSWORD")
 	}
 
@@ -72,9 +71,11 @@ func (config dbConfig) GetDriver() string {
 func (config dbConfig) GetMaxIdleConns() int {
 	return config.MaxIdleConns
 }
+
 func (config dbConfig) GetMaxOpenConns() int {
 	return config.MaxOpenConns
 }
+
 func (config dbConfig) GetConnMaxLifetime() int {
 	return config.ConnMaxLifetime
 }
