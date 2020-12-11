@@ -10,6 +10,7 @@ func RegisterRoute(e *echo.Echo) {
 	handler := InjectHandler()
 
 	g := e.Group("/user")
+
 	g.GET("/test", handler.test)
 	g.POST("/create", handler.createUser)
 	g.GET("/:user_id", handler.getUser)
