@@ -26,12 +26,15 @@ func (b *B) SayOk() {
 }
 
 func main() {
-	var b = B{
-		A: A{
-			Name: "b",
-		},
-	}
-	// b.Name = "b"
+	// var b = B{
+	// 	A: A{
+	// 		Name: "b",
+	// 	},
+	// }
+
+	b := B{}
+
+	b.Name = "b"
 	// b.A.Name = "a"
 	b.Age = 18
 
@@ -46,4 +49,11 @@ func main() {
 
 	// jsonStr, _ := json.Marshal(&b2)
 	// fmt.Println(string(jsonStr))
+
+	// u1 := user.User{
+	// 	Name: "u1",
+	// 	Age:  12,
+	// }
+
+	// u1.SayHello()
 }
