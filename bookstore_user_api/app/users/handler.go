@@ -47,8 +47,8 @@ type testMessage struct {
 
 func (h *handler) test(c echo.Context) error {
 	fmt.Println("...before handle test...")
-	return fmt.Errorf("...error...")
-	<-time.After(time.Second * 2)
+	// return fmt.Errorf("...error...")
+	<-time.After(time.Second * 5)
 	fmt.Println("...after handle test...")
 	return c.Render(http.StatusOK, "message", testMessage{
 		Test1: "test1",
