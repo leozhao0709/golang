@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"net/http"
 	"sync"
-	"time"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
 	"github.com/leozhao0709/musings/common"
 	"github.com/leozhao0709/musings/reflect"
+	xerrors "github.com/pkg/errors"
 )
 
 var (
@@ -48,7 +48,8 @@ type testMessage struct {
 func (h *handler) test(c echo.Context) error {
 	fmt.Println("...before handle test...")
 	// return fmt.Errorf("...error...")
-	<-time.After(time.Second * 5)
+	// <-time.After(time.Second * 5)
+	// panic(fmt.Errorf("decompress..."))
 	fmt.Println("...after handle test...")
 	return c.Render(http.StatusOK, "message", testMessage{
 		Test1: "test1",
@@ -61,6 +62,11 @@ func (h *handler) getUser(c echo.Context) error {
 	log.Info("...", c.Request().Header.Get("Authorization"))
 	u, err := h.service.GetUser(c.Request().Context(), userID)
 	if err != nil {
+		err1 := xerrors.Wrap(err, "789")
+		err2 := xerrors.WithMessage(err1, "456")
+		log := fmt.Sprintf("%+v", err2)
+		fmt.Println(log)
+		fmt.Println(xerrors.Is(err2, err1))
 		return err
 	}
 

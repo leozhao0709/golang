@@ -14,6 +14,18 @@ func RegisterRoute(e *echo.Echo) {
 
 	g := e.Group("/user")
 
+	m0 := func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			// defer func() {
+			// 	if err := recover(); err != nil {
+			// 		fmt.Println("panic here", err)
+			// 	}
+			// }()
+
+			return next(c)
+		}
+	}
+
 	m1 := func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			fmt.Println(".....m1 before...")
@@ -39,7 +51,7 @@ func RegisterRoute(e *echo.Echo) {
 		}
 	}
 
-	g.Use(m1, m2)
+	g.Use(m0, m1, m2)
 
 	g.GET("/test", handler.test)
 	g.POST("/create", handler.createUser)
