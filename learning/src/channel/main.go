@@ -1,10 +1,10 @@
 package main
 
 func main() {
-	// useChannel()
+	useChannel()
 	// useWg()
 	// useWg2()
-	useSelect()
+	// useSelect()
 	// useMutex()
 	// useRwmutex()
 	// useSyncOnce()

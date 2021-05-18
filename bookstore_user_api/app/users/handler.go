@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"sync"
+	"time"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
@@ -48,7 +49,7 @@ type testMessage struct {
 func (h *handler) test(c echo.Context) error {
 	fmt.Println("...before handle test...")
 	// return fmt.Errorf("...error...")
-	// <-time.After(time.Second * 5)
+	<-time.After(time.Second * 5)
 	// panic(fmt.Errorf("decompress..."))
 	fmt.Println("...after handle test...")
 	return c.Render(http.StatusOK, "message", testMessage{
