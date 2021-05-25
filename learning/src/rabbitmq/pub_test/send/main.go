@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/labstack/gommon/log"
-	"github.com/leozhao0709/go-musings/src/rabbitmq"
+	"github.com/leozhao0709/musings/rabbitmq"
 	"github.com/streadway/amqp"
 )
 
