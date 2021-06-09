@@ -19,4 +19,7 @@ func main() {
 	} else {
 		fmt.Println("convert failed....")
 	}
+
+	c := a.(string)
+	fmt.Println(c)
 }
