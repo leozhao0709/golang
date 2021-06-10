@@ -14,7 +14,12 @@ func main() {
 	// basicTest()
 	// timeZoneTest()
 
-	fmt.Println(time.Now())
+	// fmt.Println(time.Now())
+	t1 := time.Date(2021, time.January, 26, 0, 1, 0, 0, time.Local)
+	t2 := time.Date(2021, time.June, 8, 0, 0, 0, 0, time.Local)
+
+	d := t2.Sub(t1).Hours() / 24
+	fmt.Println(d)
 }
 
 func timeZoneTest() {
