@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"reflect"
 )
 
 type monster struct {
@@ -53,12 +54,58 @@ func testStruct() {
 
 	// unmarshal
 	// var monster2 = &monster{}
-	var monster2 *monster = &monster{}
-	err = json.Unmarshal(jsonStr, monster2)
+	var monster2 monster = monster{}
+	err = json.Unmarshal(jsonStr, &monster2)
 	if err != nil {
 		fmt.Println("error:", err)
 		return
 	}
-	fmt.Println(*monster2)
-	fmt.Println(monster2.Name)
+	fmt.Println(monster2)
+
+	var monster3 = make(map[string]interface{})
+	err = json.Unmarshal(jsonStr, &monster3)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(monster3)
+
+	// Filter Int
+	arr := []int{1, 2, 3, 4, 5}
+	result := filter(arr, func(val interface{}) bool {
+		return val != 5
+	})
+	fmt.Println(result)
+	// [1 2 3 4]
+	// filter String
+	arr1 := []string{"a", "b", "c", "d", "e"}
+	result1 := filter(arr1, func(val interface{}) bool {
+		return val != "c"
+	})
+	fmt.Println(result1)
+	// [a b d e]
+}
+
+func filter(arr interface{}, cond func(interface{}) bool) interface{} {
+	contentType := reflect.TypeOf(arr)
+	contentValue := reflect.ValueOf(arr)
+
+	newContent := reflect.MakeSlice(contentType, 0, 0)
+	for i := 0; i < contentValue.Len(); i++ {
+		if content := contentValue.Index(i); cond(content.Interface()) {
+			newContent = reflect.Append(newContent, content)
+		}
+	}
+	return newContent.Interface()
+
+	// // not working
+	// arr1 := arr.([]interface{})
+	// var res []interface{}
+	// for _, value := range arr1 {
+	// 	if cond(value) {
+	// 		res = append(res, value)
+	// 	}
+	// }
+	// return res
 }
