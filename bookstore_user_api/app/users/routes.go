@@ -30,7 +30,6 @@ func RegisterRoute(e *echo.Echo) {
 		return func(c echo.Context) error {
 			fmt.Println(".....m1 before...")
 			err := next(c)
-			fmt.Println("...m1 err...", err)
 			fmt.Println("...m1 after...")
 			if err != nil {
 				errResponse := common.InternalServerError(fmt.Errorf("inner error"))
@@ -44,7 +43,6 @@ func RegisterRoute(e *echo.Echo) {
 		return func(c echo.Context) error {
 			fmt.Println(".....m2 before...")
 			err := next(c)
-			fmt.Println("...m2 err...", err)
 			fmt.Println("...m2 after...")
 
 			return err
