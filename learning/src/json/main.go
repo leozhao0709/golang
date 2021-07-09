@@ -7,10 +7,10 @@ import (
 )
 
 type monster struct {
-	Name   string `json:"name"`
-	Age    int    `json:"age,omitempty"`
-	Skill  string `json:"skill"`
-	Ignore bool   `json:"-"`
+	Name   string  `json:"name"`
+	Age    int     `json:"age,omitempty"`
+	Skill  *string `json:"skill"`
+	Ignore bool    `json:"-"`
 }
 
 func main() {
@@ -44,7 +44,8 @@ func testMap() {
 
 func testStruct() {
 	// marshal
-	monster1 := &monster{Name: "牛魔王", Age: 0, Skill: "芭蕉扇", Ignore: true}
+	var skill *string = nil
+	monster1 := &monster{Name: "牛魔王", Age: 0, Skill: skill, Ignore: true}
 	jsonStr, err := json.Marshal(monster1)
 	if err != nil {
 		fmt.Println("json error", err)
