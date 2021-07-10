@@ -49,13 +49,15 @@ type testMessage struct {
 func (h *handler) test(c echo.Context) error {
 	fmt.Println("...before handle test...")
 	// return fmt.Errorf("...error...")
-	<-time.After(time.Second * 5)
+	<-time.After(time.Second * 2)
 	// panic(fmt.Errorf("decompress..."))
 	fmt.Println("...after handle test...")
-	return c.Render(http.StatusOK, "message", testMessage{
-		Test1: "test1",
-		Test2: 25,
-	})
+	// return c.Render(http.StatusOK, "message", testMessage{
+	// 	Test1: "test1",
+	// 	Test2: 25,
+	// })
+
+	return c.String(http.StatusOK, "1234")
 }
 
 func (h *handler) getUser(c echo.Context) error {

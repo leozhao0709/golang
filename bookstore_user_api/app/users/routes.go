@@ -43,8 +43,8 @@ func RegisterRoute(e *echo.Echo) {
 		return func(c echo.Context) error {
 			fmt.Println(".....m2 before...")
 			err := next(c)
-			fmt.Println("...m2 after...")
-
+			fmt.Printf("...m2 after...%+v\n", c.Response())
+			c.Response().Writer.Write([]byte("append"))
 			return err
 		}
 	}
