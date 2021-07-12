@@ -11,7 +11,10 @@ require (
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/gommon v0.3.0
 	github.com/leozhao0709/musings v0.0.0-20201019030500-a9a73db20a5e
-	github.com/pkg/errors v0.9.1 // indirect
-	github.com/spf13/viper v1.7.1
+	github.com/mattn/go-colorable v0.1.8 // indirect
+	github.com/mattn/go-isatty v0.0.13 // indirect
+	github.com/pkg/errors v0.9.1
+	github.com/spf13/viper v1.8.1
 	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897
+	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
 )
