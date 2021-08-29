@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"sync"
-	"time"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
@@ -47,15 +46,15 @@ type testMessage struct {
 }
 
 func (h *handler) test(c echo.Context) error {
-	fmt.Println("...before handle test...")
-	// return fmt.Errorf("...error...")
-	<-time.After(time.Second * 2)
-	// panic(fmt.Errorf("decompress..."))
-	fmt.Println("...after handle test...")
-	// return c.Render(http.StatusOK, "message", testMessage{
-	// 	Test1: "test1",
-	// 	Test2: 25,
-	// })
+	// fmt.Println("...before handle test...")
+	// // return fmt.Errorf("...error...")
+	// <-time.After(time.Second * 2)
+	// // panic(fmt.Errorf("decompress..."))
+	// fmt.Println("...after handle test...")
+	// // return c.Render(http.StatusOK, "message", testMessage{
+	// // 	Test1: "test1",
+	// // 	Test2: 25,
+	// // })
 
 	return c.String(http.StatusOK, "1234")
 }
