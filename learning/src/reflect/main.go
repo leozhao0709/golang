@@ -1,9 +1,11 @@
 package main
 
 import (
-	"errors"
 	"fmt"
+	"log"
 	"reflect"
+
+	"github.com/pkg/errors"
 )
 
 type myInt int64
@@ -65,19 +67,18 @@ type person struct {
 type stu struct {
 	Name    string
 	Age     int
-	Teacher person
+	Teacher *person
 }
 
 type stuDto struct {
 	Name    string
 	Height  int
-	Teacher person
+	Teacher *person
 }
 
 func copyProperties(source interface{}, target interface{}) error {
 	paramIsValid := func(data interface{}) bool {
 		reflectTypeKind := reflect.TypeOf(data).Kind()
-		fmt.Println(reflectTypeKind)
 		return reflectTypeKind == reflect.Array ||
 			reflectTypeKind == reflect.Chan ||
 			reflectTypeKind == reflect.Slice ||
@@ -99,7 +100,8 @@ func copyProperties(source interface{}, target interface{}) error {
 		targetField, ok := targetType.FieldByName(sourceField.Name)
 		if ok {
 			if sourceField.Type != targetField.Type {
-				return fmt.Errorf(`Copy error: source field "%v" type is %v, but target field "%v" type is %v`, sourceField.Name, sourceField.Type, targetField.Name, targetField.Type)
+				log.Printf(`Copy warning: source field "%v" type is %v, but target field "%v" type is %v, so ignored`, sourceField.Name, sourceField.Type, targetField.Name, targetField.Type)
+				continue
 			}
 			targetVal.FieldByName(sourceField.Name).Set(sourceVal.Field(i))
 		}
@@ -111,18 +113,19 @@ func copyProperties(source interface{}, target interface{}) error {
 func testCopy() {
 	name := "testName"
 	age := 18
-	s := stu{Name: name, Age: age, Teacher: person{name: "teacherName"}}
+	s := stu{Name: name, Age: age, Teacher: &person{name: "teacherName"}}
 	sd := stuDto{}
 
-	err := copyProperties(&s, &sd)
+	err := copyProperties(s, &sd)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Printf("%+v", err)
 		return
 	}
 
 	fmt.Printf("%+v, %+v\n", s, sd)
-	s.Name = "newName"
-	fmt.Printf("%+v, %+v\n", s, sd)
+	// s.Teacher = &person{name: "newTeacher"}
+	s.Teacher.name = "newTeacher"
+	fmt.Printf("%+v, %+v\n", s.Teacher.name, sd.Teacher.name)
 }
 
 func main() {

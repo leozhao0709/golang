@@ -16,6 +16,7 @@ require (
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/onsi/ginkgo v1.15.0
 	github.com/onsi/gomega v1.10.5
+	github.com/pkg/errors v0.9.1
 	github.com/spf13/viper v1.7.1
 	github.com/streadway/amqp v1.0.0
 	google.golang.org/grpc v1.27.0
