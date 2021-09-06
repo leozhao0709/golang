@@ -1,8 +1,6 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 type person struct {
 	name  string
@@ -21,7 +19,7 @@ type react struct {
 	leftUp, rightDown *pointer
 }
 
-func test(x *pointer) (*pointer, error)  {
+func test(x *pointer) (*pointer, error) {
 	if x.x == 0 {
 		return nil, fmt.Errorf("error")
 	}

@@ -78,21 +78,16 @@ type stuDto struct {
 
 func copyProperties(source interface{}, target interface{}) error {
 	paramIsValid := func(data interface{}) bool {
-		reflectTypeKind := reflect.TypeOf(data).Kind()
-		return reflectTypeKind == reflect.Array ||
-			reflectTypeKind == reflect.Chan ||
-			reflectTypeKind == reflect.Slice ||
-			reflectTypeKind == reflect.Map ||
-			reflectTypeKind == reflect.Ptr
+		return reflect.TypeOf(data).Kind() == reflect.Ptr && reflect.TypeOf(data).Elem().Kind() == reflect.Struct
 	}
 
 	if !paramIsValid(source) || !paramIsValid(target) {
-		return errors.New("Copy error: source and target must be Array, Chan, Slice, Map or Ptr")
+		return errors.New("Copy error: source and target must be a Ptr of struct")
 	}
 
 	sourceType := reflect.TypeOf(source).Elem()
-	sourceVal := reflect.ValueOf(source).Elem()
 	targetType := reflect.TypeOf(target).Elem()
+	sourceVal := reflect.ValueOf(source).Elem()
 	targetVal := reflect.ValueOf(target).Elem()
 
 	for i := 0; i < sourceType.NumField(); i++ {
@@ -116,7 +111,7 @@ func testCopy() {
 	s := stu{Name: name, Age: age, Teacher: &person{name: "teacherName"}}
 	sd := stuDto{}
 
-	err := copyProperties(s, &sd)
+	err := copyProperties(&s, &sd)
 	if err != nil {
 		fmt.Printf("%+v", err)
 		return
@@ -126,6 +121,16 @@ func testCopy() {
 	// s.Teacher = &person{name: "newTeacher"}
 	s.Teacher.name = "newTeacher"
 	fmt.Printf("%+v, %+v\n", s.Teacher.name, sd.Teacher.name)
+
+	arr := []int{1, 2, 3}
+	s1 := arr[:]
+	s2 := make([]int, 3)
+	err = copyProperties(&s1, &s2)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(s1)
 }
 
 func main() {
