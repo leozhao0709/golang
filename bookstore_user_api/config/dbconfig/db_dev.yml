@@ -1,9 +1,0 @@
-driver: mysql
-host: localhost
-port: 3306
-database: bookstore_user
-username: lzhao
-password: 12345
-max_idle_conns: 10
-max_open_conns: 100
-conn_max_lifetime: 3600 # seconds

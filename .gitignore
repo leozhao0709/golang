@@ -1,3 +1,39 @@
+node_modules
 .DS_Store
+dist
+target
+.nyc_output
+lib
+tmp
+coverage
+*-error.log
+*-debug.log
 .idea
-.vscode
+*-local.*
+log
+bin
+
+
+/.next/
+/out/
+/.pnp
+.pnp.js
+*.pem
+
+# local env files
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# python
+.venv
+__pycache__
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
