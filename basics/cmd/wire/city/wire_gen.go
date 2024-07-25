@@ -11,7 +11,7 @@ import (
 	"github.com/google/wire"
 )
 
-// Injectors from wire.go:
+// Injectors from city_wire.go:
 
 func InitializeCity(eventName string) (City, error) {
 	message := event.NewMessage(eventName)
@@ -24,6 +24,22 @@ func InitializeCity(eventName string) (City, error) {
 	return city, nil
 }
 
-// wire.go:
+// Injectors from event_wire.go:
+
+func InitializeEvent(phrase string) (event.Event, error) {
+	message := event.NewMessage(phrase)
+	greeter := event.NewGreeter(message)
+	eventEvent, err := event.NewEvent(greeter)
+	if err != nil {
+		return event.Event{}, err
+	}
+	return eventEvent, nil
+}
+
+// city_wire.go:
 
 var CitySet = wire.NewSet(NewCity, event.EventSet)
+
+// event_wire.go:
+
+var EventSet = wire.NewSet(event.EventSet)

@@ -1,31 +1,24 @@
 package main
 
-import (
-	"fmt"
-	"math/rand"
-	"strconv"
-	"strings"
-)
+import "fmt"
 
 func main() {
-	a := make([]int, 0)
+	a := []int{}
 	a = append(a, 1, 2, 3)
-	fmt.Println(a)
-	b := a[:2]
-	fmt.Println(b)
 
-	var c []int
-	// c = append(c, 2)
-	fmt.Println(c)
+	appendTest(a, 1)
+	fmt.Println("------", a)
 
-	rand := rand.New(rand.NewSource(66))
-	fmt.Println(rand.Intn(100))
+	appendTest(a, 10)
+	fmt.Println("------", a)
 
-	d := [...]int{1, 2, 3}
-	s := strings.Builder{}
-	for _, ele := range d {
-		s.WriteString(strconv.Itoa(ele))
+	a = append(a, 1, 2, 3, 4, 5)
+	fmt.Println("------", a)
+}
+
+func appendTest(arr []int, n int) {
+	arr[0] = 100
+	for i := 0; i < n; i++ {
+		arr = append(arr, i)
 	}
-
-	fmt.Println(s.String())
 }
