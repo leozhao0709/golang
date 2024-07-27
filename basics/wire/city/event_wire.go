@@ -4,7 +4,7 @@
 package city
 
 import (
-	"example.com/basics/cmd/wire/event"
+	"example.com/basics/wire/event"
 	"github.com/google/wire"
 )
 

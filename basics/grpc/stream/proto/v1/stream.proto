@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option go_package = "../../protogen/v1;pb";
+
+service Greeter {
+  rpc ServerSendStream(StreamReqData) returns (stream StreamResData); // server -> client stream
+  rpc ClientSendStream(stream StreamReqData) returns (StreamResData); // client -> server stream
+  rpc BidirectionalStream(stream StreamReqData) returns (stream StreamResData); // client -> server and server -> client stream
+}
+message StreamReqData {
+    string data = 1;
+}
+
+message StreamResData {
+    string data = 1;
+}

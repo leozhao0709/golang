@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"example.com/basics/cmd/wire/event"
+	"example.com/basics/wire/event"
 )
 
 func main() {
