@@ -5,12 +5,18 @@ import (
 	"log"
 	"net"
 
-	pb "example.com/basics/grpc/simple/protogen/v1"
+	pb "example.com/basics/grpc/simple/gen/go/proto/v1"
 	"google.golang.org/grpc"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type server struct {
 	pb.UnimplementedGreeterServer
+}
+
+// Ping implements pb.GreeterServer.
+func (s *server) Ping(context.Context, *emptypb.Empty) (*pb.Pong, error) {
+	return &pb.Pong{Message: "pong"}, nil
 }
 
 func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloResponse, error) {
@@ -18,6 +24,8 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 		Message: "Hello " + in.GetName(),
 	}, nil
 }
+
+var _ pb.GreeterServer = (*server)(nil)
 
 func main() {
 	lis, err := net.Listen("tcp", "0.0.0.0:8000")

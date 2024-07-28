@@ -5,9 +5,10 @@ import (
 	"log"
 	"time"
 
-	pb "example.com/basics/grpc/simple/protogen/v1"
+	pb "example.com/basics/grpc/simple/gen/go/proto/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 func main() {
@@ -23,9 +24,11 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	resp, err := client.SayHello(ctx, &pb.HelloRequest{Name: "world"})
+	respPong, err := client.Ping(ctx, &emptypb.Empty{})
+	respHello, err := client.SayHello(ctx, &pb.HelloRequest{Name: "world"})
 	if err != nil {
 		log.Fatalf("Error: %v", err)
 	}
-	log.Printf("Greeted: %s", resp.GetMessage())
+	log.Printf("Greeted: %s", respPong.GetMessage())
+	log.Printf("Greeted: %s", respHello.GetMessage())
 }

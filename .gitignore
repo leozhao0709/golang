@@ -11,17 +11,17 @@ coverage
 .idea
 *-local.*
 log
-bin
+vendor
 
+# env file
+env
+.env.*
 
 /.next/
 /out/
 /.pnp
 .pnp.js
 *.pem
-
-# local env files
-.env*.local
 
 # vercel
 .vercel
@@ -37,3 +37,15 @@ __pycache__
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# swift
+/.build
+# /Packages
+xcuserdata/
+DerivedData/
+.swiftpm/configuration/registries.json
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+.netrc
+
+# microsoft api-extractor
+temp
