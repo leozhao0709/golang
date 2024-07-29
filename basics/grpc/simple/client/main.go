@@ -8,11 +8,25 @@ import (
 	pb "example.com/basics/grpc/simple/gen/go/proto/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 func main() {
-	conn, err := grpc.NewClient("0.0.0.0:8000", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	var interceptor grpc.UnaryClientInterceptor = func(ctx context.Context, method string, req, reply any, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
+		start := time.Now()
+
+		log.Printf("Start Sending request: %s", method)
+		err := invoker(ctx, method, req, reply, cc, opts...)
+		timeTaken := time.Since(start)
+		log.Printf("Received response: %s, took: %s", method, timeTaken)
+		return err
+	}
+
+	// interceptor
+	var interceptorOption = grpc.WithUnaryInterceptor(interceptor)
+	options := []grpc.DialOption{interceptorOption, grpc.WithTransportCredentials(insecure.NewCredentials())}
+	conn, err := grpc.NewClient("0.0.0.0:8000", options...)
 
 	if err != nil {
 		log.Fatalf("Failed to connect: %v", err)
@@ -24,11 +38,18 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
+	md := metadata.New(map[string]string{
+		"Authorization": "Bearer YOUR_TOKEN_HERE", // key will be converted to lower case.
+		"x-request-id":  "12345",                  // Replace with your actual request ID.
+	})
+	ctx = metadata.NewOutgoingContext(ctx, md)
+
 	respPong, err := client.Ping(ctx, &emptypb.Empty{})
 	respHello, err := client.SayHello(ctx, &pb.HelloRequest{Name: "world"})
 	if err != nil {
 		log.Fatalf("Error: %v", err)
 	}
+
 	log.Printf("Greeted: %s", respPong.GetMessage())
 	log.Printf("Greeted: %s", respHello.GetMessage())
 }
