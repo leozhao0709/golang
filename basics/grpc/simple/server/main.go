@@ -7,7 +7,9 @@ import (
 
 	pb "example.com/basics/grpc/simple/gen/go/proto/v1"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
@@ -22,8 +24,13 @@ func (s *server) Ping(context.Context, *emptypb.Empty) (*pb.Pong, error) {
 
 func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloResponse, error) {
 	if md, ok := metadata.FromIncomingContext(ctx); ok {
+		if len(md.Get("authorization")) == 0 {
+			return nil, status.Errorf(codes.Unauthenticated, "missing authorization token")
+		}
 		log.Printf("Received token: %s", md.Get("authorization")[0]) // key will be converted to lower case
 		log.Printf("Received token: %s", md.Get("x-request-id")[0])
+	} else {
+		return nil, status.Errorf(codes.Internal, "missing authorization token")
 	}
 
 	return &pb.HelloResponse{
