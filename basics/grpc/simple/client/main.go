@@ -46,7 +46,7 @@ func main() {
 	ctx = metadata.NewOutgoingContext(ctx, md)
 
 	respPong, err := client.Ping(ctx, &emptypb.Empty{})
-	respHello, err := client.SayHello(ctx, &pb.HelloRequest{Name: "world"})
+	// respHello, err := client.SayHello(ctx, &pb.HelloRequest{Name: "world"})
 	if err != nil {
 		st, ok := status.FromError(err)
 		if !ok {
@@ -56,5 +56,5 @@ func main() {
 	}
 
 	log.Printf("Greeted: %s", respPong.GetMessage())
-	log.Printf("Greeted: %s", respHello.GetMessage())
+	// log.Printf("Greeted: %s", respHello.GetMessage())
 }

@@ -40,7 +40,9 @@ func useSelect() string {
 
 func service1(c chan<- string) {
 	fmt.Println("service1 started!")
-	rand.Seed(time.Now().UnixNano())
+
+	randSrc := rand.NewSource(time.Now().UnixNano())
+	rand := rand.New(randSrc)
 	resTime := rand.Intn(200)
 	fmt.Println("service1 resTime is", resTime)
 	time.Sleep(time.Millisecond * time.Duration(resTime))
@@ -49,7 +51,8 @@ func service1(c chan<- string) {
 
 func service2(c chan<- string) {
 	fmt.Println("service2 started!")
-	rand.Seed(time.Now().UnixNano())
+	randSrc := rand.NewSource(time.Now().UnixNano())
+	rand := rand.New(randSrc)
 	resTime := rand.Intn(200)
 	fmt.Println("service2 resTime is", resTime)
 	time.Sleep(time.Millisecond * time.Duration(resTime))
