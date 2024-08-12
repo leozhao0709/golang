@@ -5,7 +5,7 @@ import (
 	"log"
 	"net"
 
-	pb "example.com/basics/grpc/simple/gen/go/proto/v1"
+	pb "example.com/basics/grpc/simple/protogen/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"

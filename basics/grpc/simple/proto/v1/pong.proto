@@ -1,10 +1,8 @@
 // proto/v1/pong.proto
 syntax = "proto3";
-option go_package = "gen/go/proto/v1;pb"; // 'go import/path;package_name'
-package v1.pb;
+package protogen.v1.pb;
+option go_package = "protogen/v1;pb"; // 'go import/path;package_name'
 
 message Pong {
   string message = 1;
 }
-
-

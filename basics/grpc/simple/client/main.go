@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	pb "example.com/basics/grpc/simple/gen/go/proto/v1"
+	pb "example.com/basics/grpc/simple/protogen/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"

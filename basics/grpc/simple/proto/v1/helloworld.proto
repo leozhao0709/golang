@@ -1,10 +1,10 @@
 // proto/v1/helloworld.proto
 syntax = "proto3";
 
-package v1.pb; // for java, c++ etc...
-option go_package = "gen/go/proto/v1;pb"; // 'go import/path(fromRoot);package_name'
+package protogen.v1.pb; // for java, c++ etc...
+option go_package = "protogen/v1;pb"; // 'go import/path(fromRoot);package_name'
 import "google/protobuf/empty.proto";
-import "proto/v1/pong.proto"; // 'path relative to -I option when you use protoc command to generate code...'
+import "v1/pong.proto"; // 'path relative to -I option when you use protoc command to generate code...'
 
 service Greeter {
   rpc SayHello (HelloRequest) returns (HelloResponse);
