@@ -12,8 +12,8 @@ func main() {
 	appendTest(a, 10)
 	fmt.Println("------", a)
 
-	a = append(a, 1, 2, 3, 4, 5)
-	fmt.Println("------", a)
+	b := a[2:3]
+	fmt.Println(b)
 }
 
 func appendTest(arr []int, n int) {
