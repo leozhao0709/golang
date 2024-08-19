@@ -12,8 +12,8 @@ PYTHON_OUT_DIR=$BASE_PATH/$PYTHON_PROJECT/protogen
 
 # Create output directories if they don't exist
 mkdir -p $GO_OUT_DIR
-mkdir -p $CPP_OUT_DIR
-mkdir -p $PYTHON_OUT_DIR
+# mkdir -p $CPP_OUT_DIR
+# mkdir -p $PYTHON_OUT_DIR
 
 # Find all .proto files
 PROTO_FILES=$(find $BASE_PATH/proto -name "*.proto")
@@ -23,6 +23,6 @@ PROTO_FILES=$(find $BASE_PATH/proto -name "*.proto")
 protoc -I $BASE_PATH/proto \
 --go_out=$GO_OUT_DIR --go_opt=paths=source_relative \
 --go-grpc_out=$GO_OUT_DIR --go-grpc_opt=paths=source_relative \
---cpp_out=$CPP_OUT_DIR \
---python_out=$PYTHON_OUT_DIR \
 $PROTO_FILES
+# --cpp_out=$CPP_OUT_DIR \
+# --python_out=$PYTHON_OUT_DIR \
