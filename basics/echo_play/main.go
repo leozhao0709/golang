@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"log/slog"
 	"net/http"
 	"os"
@@ -29,9 +30,9 @@ type Validator interface {
 
 func (u User) Validate() error {
 	return validation.ValidateStruct(&u,
-		validation.Field(&u.Name, validation.Required),
-		validation.Field(&u.Email, validation.Required),
-		validation.Field(&u.Age, validation.NotNil, validation.Max(10)),
+		validation.Field(&u.Name),
+		validation.Field(&u.Email),
+		validation.Field(&u.Age),
 	)
 }
 
@@ -39,9 +40,17 @@ func ValidateRequestBody[T Validator]() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			t := new(T)
-			if err := c.Bind(t); err != nil {
-				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+
+			decoder := json.NewDecoder(c.Request().Body)
+			decoder.DisallowUnknownFields()
+
+			if err := decoder.Decode(&t); err != nil {
+				return echo.NewHTTPError(http.StatusBadRequest, "Invalid request body")
 			}
+
+			// if err := c.Bind(t); err != nil {
+			// 	return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+			// }
 
 			if err := (*t).Validate(); err != nil {
 				logger.Error("Validate request body failed: ", "err", err)
