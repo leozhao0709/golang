@@ -144,7 +144,7 @@ func main() {
 	e.POST("/users", func(c echo.Context) (err error) {
 		u := &User{}
 		if err := c.Bind(u); err != nil {
-			return c.JSON(http.StatusBadRequest, err)
+			return err
 		}
 
 		u_dto := &UserDto{}

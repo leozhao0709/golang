@@ -1,8 +1,8 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
-	"errors"
 	"io"
 	"net/http"
 
@@ -11,6 +11,10 @@ import (
 	"github.com/go-chi/render"
 	"github.com/jellydator/validation"
 )
+
+type Validator interface {
+	Validate() error
+}
 
 type JobReq struct {
 	Title *string `json:"title"`
@@ -22,12 +26,6 @@ func (job JobReq) Validate() error {
 	)
 }
 
-// func (job JobReq) Bind(r *http.Request) error {
-// 	return validation.ValidateStruct(&job,
-// 		validation.Field(&job.Title, validation.NotNil),
-// 	)
-// }
-
 type PersonReq struct {
 	Email *string `json:"email"`
 	Name  *string `json:"name"`
@@ -35,13 +33,31 @@ type PersonReq struct {
 	Job   *JobReq `json:"job"`
 }
 
-func (u PersonReq) Bind(r *http.Request) error {
+func (u PersonReq) Validate() error {
 	return validation.ValidateStruct(&u,
 		validation.Field(&u.Name, validation.NotNil),
 		validation.Field(&u.Email, validation.Required),
 		validation.Field(&u.Age, validation.Min(13)),
 		validation.Field(&u.Job, validation.NotNil),
 	)
+}
+
+func ValidateReqBody[v Validator]() func(handler http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			validator := new(v)
+
+			if err := render.Decode(r, validator); err != nil {
+				render.JSON(w, r, render.M{
+					"error": err.Error(),
+				})
+				return
+			}
+
+			ctx := context.WithValue(r.Context(), "req_body", validator)
+			next.ServeHTTP(w, r.WithContext(ctx))
+		})
+	}
 }
 
 func main() {
@@ -54,34 +70,32 @@ func main() {
 		switch render.GetRequestContentType(r) {
 		case render.ContentTypeJSON:
 			err = DecodeJSON(r.Body, v)
-		case render.ContentTypeXML:
-			err = render.DecodeXML(r.Body, v)
-		case render.ContentTypeForm:
-			err = render.DecodeForm(r.Body, v)
 		default:
-			err = errors.New("render: unable to automatically decode the request content type")
+			err = render.DefaultDecoder(r, v)
 		}
 
-		return err
+		if err != nil {
+			return err
+		}
+
+		if validator, ok := v.(Validator); ok {
+			return validator.Validate()
+		}
+
+		return nil
 	}
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello World!"))
+		render.JSON(w, r, "Hello World!")
 	})
 
 	r.
-		// With(DisallowUnknownJsonFields[PersonReq]()).
+		With(ValidateReqBody[PersonReq]()).
 		Post("/person", func(w http.ResponseWriter, r *http.Request) {
-			// p := r.Context().Value("request_body").(*PersonReq)
+			p := r.Context().Value("req_body").(*PersonReq)
 
-			p := &PersonReq{}
-			if err := render.Bind(r, p); err != nil {
-				render.Status(r, http.StatusBadRequest)
-				render.JSON(w, r, map[string]string{"error": err.Error()})
-				return
-			}
-
-			render.JSON(w, r, p)
+			s := []*PersonReq{p}
+			render.JSON(w, r, s)
 		})
 	http.ListenAndServe(":3000", r)
 
