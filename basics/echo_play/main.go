@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"os"
@@ -12,10 +13,21 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
+type JobReq struct {
+	Title *string `json:"title"`
+}
+
+func (job JobReq) Validate() error {
+	return validation.ValidateStruct(&job,
+		validation.Field(&job.Title, validation.NotNil),
+	)
+}
+
 type User struct {
 	Name  *string `json:"name" `
 	Email *string `json:"email" `
 	Age   *int    `json:"age,omitempty" `
+	Job   *JobReq `json:"job"`
 }
 
 type UserDto struct {
@@ -32,43 +44,51 @@ func (u User) Validate() error {
 	return validation.ValidateStruct(&u,
 		validation.Field(&u.Name),
 		validation.Field(&u.Email),
-		validation.Field(&u.Age),
+		validation.Field(&u.Age, validation.NotNil, validation.Max(100)),
+		validation.Field(&u.Job, validation.NotNil),
 	)
 }
 
-func ValidateRequestBody[T Validator]() echo.MiddlewareFunc {
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			t := new(T)
-
-			decoder := json.NewDecoder(c.Request().Body)
-			decoder.DisallowUnknownFields()
-
-			if err := decoder.Decode(&t); err != nil {
-				return echo.NewHTTPError(http.StatusBadRequest, "Invalid request body")
-			}
-
-			// if err := c.Bind(t); err != nil {
-			// 	return echo.NewHTTPError(http.StatusBadRequest, err.Error())
-			// }
-
-			if err := (*t).Validate(); err != nil {
-				logger.Error("Validate request body failed: ", "err", err)
-				return echo.NewHTTPError(http.StatusBadRequest, err)
-			}
-
-			c.Set("request_body", t)
-			return next(c)
-		}
-	}
-}
+// 			return next(c)
+// 		}
+// 	}
+// }
 
 var logger = slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
 	AddSource: true,
 }))
 
+type JSONSerializer struct {
+	echo.DefaultJSONSerializer
+}
+
+func (d JSONSerializer) Deserialize(c echo.Context, i interface{}) error {
+	decoder := json.NewDecoder(c.Request().Body)
+	decoder.DisallowUnknownFields()
+	err := decoder.Decode(i)
+	if ute, ok := err.(*json.UnmarshalTypeError); ok {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Unmarshal type error: expected=%v, got=%v, field=%v, offset=%v", ute.Type, ute.Value, ute.Field, ute.Offset)).SetInternal(err)
+	} else if se, ok := err.(*json.SyntaxError); ok {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Syntax error: offset=%v, error=%v", se.Offset, se.Error())).SetInternal(err)
+	}
+
+	if err != nil {
+		return err
+	}
+
+	if v, ok := i.(Validator); ok {
+		err := v.Validate()
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+		}
+	}
+
+	return nil
+}
+
 func main() {
 	e := echo.New()
+	e.JSONSerializer = &JSONSerializer{}
 
 	e.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
 		LogRequestID: true,
@@ -100,15 +120,45 @@ func main() {
 		},
 	}))
 
+	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			err := next(c)
+
+			if err != nil {
+				// Define a custom error response
+				var code = http.StatusInternalServerError
+				var message interface{} = "Internal Server Error"
+
+				// If the error is an echo.HTTPError, use the error code and message
+				if he, ok := err.(*echo.HTTPError); ok {
+					code = he.Code
+					message = he.Message
+				}
+
+				fmt.Println("---------------------------")
+				// Send the custom error response
+				return c.JSON(code, map[string]interface{}{
+					"error":   true,
+					"message": message,
+				})
+			}
+			return nil
+		}
+	})
+
 	e.POST("/users", func(c echo.Context) (err error) {
-		u := c.Get("request_body").(*User)
+		u := &User{}
+		if err := c.Bind(u); err != nil {
+			return c.JSON(http.StatusBadRequest, err)
+		}
 
 		u_dto := &UserDto{}
 		copier.Copy(u_dto, u)
 		slog.Info("User: ", "u_dto", u_dto)
 
 		return c.JSON(http.StatusOK, u)
-	}, ValidateRequestBody[User]())
+	},
+	)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
