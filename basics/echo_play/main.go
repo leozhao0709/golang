@@ -49,11 +49,6 @@ func (u User) Validate() error {
 	)
 }
 
-// 			return next(c)
-// 		}
-// 	}
-// }
-
 var logger = slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
 	AddSource: true,
 }))
