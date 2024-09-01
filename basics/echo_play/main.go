@@ -30,6 +30,8 @@ type User struct {
 	Job   *JobReq `json:"job"`
 }
 
+
+
 type UserDto struct {
 	Name  string
 	Email string
@@ -130,7 +132,6 @@ func main() {
 					message = he.Message
 				}
 
-				fmt.Println("---------------------------")
 				// Send the custom error response
 				return c.JSON(code, map[string]interface{}{
 					"error":   true,
@@ -141,7 +142,7 @@ func main() {
 		}
 	})
 
-	e.POST("/users", func(c echo.Context) (err error) {
+	e.POST("/person", func(c echo.Context) (err error) {
 		u := &User{}
 		if err := c.Bind(u); err != nil {
 			return err
@@ -149,7 +150,7 @@ func main() {
 
 		u_dto := &UserDto{}
 		copier.Copy(u_dto, u)
-		slog.Info("User: ", "u_dto", u_dto)
+		logger.Info("User: ", "u_dto", u_dto)
 
 		return c.JSON(http.StatusOK, u)
 	},

@@ -7,9 +7,9 @@ import (
 )
 
 func main() {
-	fmt.Println("select----", useSelect())
+	// fmt.Println("select----", useSelect())
 
-	// selectOverTest()
+	selectOverTest()
 }
 
 func selectOverTest() {
