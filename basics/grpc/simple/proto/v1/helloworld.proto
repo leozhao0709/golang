@@ -11,6 +11,21 @@ service Greeter {
   rpc Ping (google.protobuf.Empty) returns (Pong);
 }
 
+enum Status {
+  OK = 0;
+  CANCELLED = 1;
+  UNKNOWN = 2;
+  FORBIDDEN = 3;
+  NOT_FOUND = 4;
+  ALREADY_EXISTS = 5;
+  PERMISSION_DENIED = 6;
+}
+
+message HiResponse {
+  Status status = 1;
+  string message = 2;
+}
+
 message HelloRequest {
   string name = 1;
 }
