@@ -6,6 +6,7 @@ require (
 	github.com/go-chi/chi/v5 v5.1.0
 	github.com/go-chi/httplog/v2 v2.1.1
 	github.com/go-chi/render v1.0.3
+	github.com/golang/protobuf v1.5.4
 	github.com/google/go-cmp v0.6.0
 	github.com/google/wire v0.6.0
 	github.com/jinzhu/copier v0.4.0
@@ -19,14 +20,6 @@ require (
 require (
 	github.com/ajg/form v1.5.1 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
-	github.com/jinzhu/copier v0.4.0 // indirect
-	github.com/ledongthuc/pdf v0.0.0-20240201131950-da5b75280b06 // indirect
-	github.com/pdfcpu/pdfcpu v0.8.0 // indirect
-	github.com/sirupsen/logrus v1.9.3 // indirect
-	github.com/unidoc/pkcs7 v0.2.0 // indirect
-	github.com/unidoc/timestamp v0.0.0-20200412005513-91597fd3793a // indirect
-	github.com/unidoc/unitype v0.4.0 // indirect
-	golang.org/x/image v0.18.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 )
 
